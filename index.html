@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu Link</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 50px auto;
+      padding: 0 20px;
+      background: #f5f5f5;
+    }
+
+    h1 {
+      margin-bottom: 25px;
+    }
+
+    #menu {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    #menu a {
+      display: block;
+      padding: 14px 18px;
+      background: white;
+      color: #222;
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+
+    #menu a:hover {
+      background: #eeeeee;
+    }
+
+    .errore {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Menu</h1>
+
+  <div id="menu"></div>
+
+  <script>
+    fetch("links.json")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Impossibile leggere links.json");
+        }
+
+        return response.json();
+      })
+      .then(links => {
+        const menu = document.getElementById("menu");
+
+        links.forEach(link => {
+          const elemento = document.createElement("a");
+
+          elemento.textContent = link.nome;
+          elemento.href = link.url;
+
+          // Se vuoi aprire i link in una nuova scheda:
+          elemento.target = "_blank";
+          elemento.rel = "noopener noreferrer";
+
+          menu.appendChild(elemento);
+        });
+      })
+      .catch(error => {
+        document.getElementById("menu").innerHTML =
+          '<p class="errore">Errore nel caricamento del menu.</p>';
+
+        console.error(error);
+      });
+  </script>
+
+</body>
+</html>

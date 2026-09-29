@@ -1,0 +1,18 @@
+[
+  {
+    "nome": "Google",
+    "url": "https://www.google.com"
+  },
+  {
+    "nome": "Wikipedia",
+    "url": "https://it.wikipedia.org"
+  },
+  {
+    "nome": "OpenAI",
+    "url": "https://openai.com"
+  },
+  {
+    "nome": "Università di Pisa",
+    "url": "https://www.unipi.it"
+  }
+]
