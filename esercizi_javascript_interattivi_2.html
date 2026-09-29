@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JavaScript Lab — Serie 2</title>
+<style>
+  :root {
+    --bg: #f3f5f9;
+    --card: #ffffff;
+    --ink: #172033;
+    --muted: #657089;
+    --line: #dfe5ef;
+    --accent: #315efb;
+    --accent-dark: #2347c6;
+    --code: #101522;
+    --code-ink: #edf2ff;
+    --ok: #128247;
+    --ok-bg: #eaf8f0;
+    --bad: #bd2c2c;
+    --bad-bg: #fff0f0;
+    --warn: #9b6a00;
+    --warn-bg: #fff7df;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at 10% 0%, #e8edff 0, transparent 28rem),
+      radial-gradient(circle at 90% 10%, #e8f5ff 0, transparent 25rem),
+      var(--bg);
+    color: var(--ink);
+  }
+
+  .wrap {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 44px 0 80px;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #18254a, #315efb);
+    color: white;
+    border-radius: 24px;
+    padding: 32px 34px;
+    box-shadow: 0 18px 55px rgba(32, 55, 115, .18);
+    margin-bottom: 26px;
+  }
+
+  .hero .kicker {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .14em;
+    opacity: .8;
+  }
+
+  .hero h1 {
+    margin: 7px 0 10px;
+    font-size: clamp(30px, 5vw, 50px);
+    line-height: 1.02;
+  }
+
+  .hero p {
+    max-width: 800px;
+    margin: 0;
+    opacity: .9;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .stats {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  .stat {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.18);
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .toolbar {
+    position: sticky;
+    top: 10px;
+    z-index: 20;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    background: rgba(255,255,255,.92);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(10px);
+    border-radius: 18px;
+    padding: 12px;
+    box-shadow: 0 10px 30px rgba(20,30,55,.08);
+    margin-bottom: 22px;
+  }
+
+  button {
+    appearance: none;
+    border: 0;
+    border-radius: 12px;
+    padding: 11px 16px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .primary {
+    background: var(--accent);
+    color: white;
+  }
+  .primary:hover { background: var(--accent-dark); }
+
+  .secondary {
+    background: #edf1f7;
+    color: #26334f;
+  }
+
+  #globalScore {
+    margin-left: auto;
+    font-weight: 900;
+    color: var(--accent-dark);
+    padding: 7px 10px;
+  }
+
+  .exercise {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 24px;
+    margin: 18px 0;
+    box-shadow: 0 10px 30px rgba(27, 39, 74, .06);
+  }
+
+  .exercise-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .14em;
+    color: var(--accent);
+  }
+
+  h2 {
+    margin: 4px 0 0;
+    font-size: 24px;
+  }
+
+  .exercise-score {
+    min-width: 58px;
+    text-align: center;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #2d4cca;
+    padding: 7px 10px;
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  .desc {
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 12px 0 18px;
+  }
+
+  .desc code {
+    background: #eef1f6;
+    color: #2b3549;
+    padding: 2px 6px;
+    border-radius: 6px;
+  }
+
+  pre {
+    overflow-x: auto;
+    background: var(--code);
+    color: var(--code-ink);
+    border-radius: 16px;
+    padding: 20px;
+    margin: 0;
+    border: 1px solid #242b3b;
+    line-height: 1.75;
+    tab-size: 2;
+  }
+
+  pre code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 14px;
+  }
+
+  select.answer-select {
+    max-width: 230px;
+    margin: 1px 4px;
+    padding: 4px 28px 4px 8px;
+    border-radius: 7px;
+    border: 1px solid #7382aa;
+    background: #1d2740;
+    color: white;
+    font: inherit;
+    font-weight: 800;
+    vertical-align: baseline;
+  }
+
+  select.answer-select.correct {
+    background: #0d6338;
+    border-color: #3ad17f;
+  }
+
+  select.answer-select.wrong {
+    background: #772626;
+    border-color: #ff7777;
+  }
+
+  select.answer-select.unanswered {
+    background: #6b531a;
+    border-color: #ffc94e;
+  }
+
+  .exercise-feedback {
+    margin-top: 13px;
+    min-height: 22px;
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .exercise-feedback.ok { color: var(--ok); }
+  .exercise-feedback.bad { color: var(--bad); }
+  .exercise-feedback.warn { color: var(--warn); }
+
+  .result-panel {
+    display: none;
+    margin-top: 24px;
+    padding: 24px;
+    border-radius: 20px;
+    border: 1px solid var(--line);
+    background: white;
+    box-shadow: 0 10px 30px rgba(27,39,74,.06);
+  }
+
+  .result-panel.show { display: block; }
+  .result-panel h3 { margin: 0 0 6px; font-size: 26px; }
+  .result-panel p { margin: 0; color: var(--muted); line-height: 1.5; }
+
+  .progress {
+    height: 12px;
+    background: #e8ecf4;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 16px;
+  }
+
+  .progress > div {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #315efb, #5a82ff);
+    transition: width .35s ease;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+  .dot.ok { background: #3ad17f; }
+  .dot.bad { background: #ff7777; }
+  .dot.warn { background: #ffc94e; }
+
+  footer {
+    color: #7a8499;
+    font-size: 13px;
+    text-align: center;
+    margin-top: 32px;
+  }
+
+  @media (max-width: 720px) {
+    .wrap { width: min(100% - 18px, 1180px); padding-top: 18px; }
+    .hero { border-radius: 18px; padding: 24px 20px; }
+    .exercise { padding: 18px; border-radius: 18px; }
+    #globalScore { width: 100%; margin-left: 0; }
+    pre { padding: 14px; }
+    pre code { font-size: 12.5px; }
+    select.answer-select { max-width: 180px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker">JAVASCRIPT LAB · SERIE 2</div>
+    <h1>10 esercizi tosti e fantasiosi</h1>
+    <p>
+      Completa il codice scegliendo le istruzioni corrette nelle tendine.
+      Puoi correggere quando vuoi: ogni scelta verrà evidenziata e il punteggio
+      sarà calcolato sull'intera pagina.
+    </p>
+    <div class="stats">
+      <span class="stat">10 esercizi</span>
+      <span class="stat">61 tendine</span>
+      <span class="stat">medio-avanzato</span>
+      <span class="stat">HTML offline</span>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <button class="primary" id="checkBtn">✓ Correggi tutto</button>
+    <button class="secondary" id="resetBtn">↺ Azzera risposte</button>
+    <div id="globalScore">Punteggio: — / 61</div>
+  </div>
+
+  
+    <section class="exercise" id="exercise-1">
+      <div class="exercise-head">
+        <div>
+          <span class="eyebrow">ESERCIZIO 1</span>
+          <h2>Il radar dei droni</h2>
+        </div>
+        <div class="exercise-score" id="score-1">0/6</div>
+      </div>
+      <p class="desc">Una griglia contiene le altezze rilevate da un drone. Conta quante celle interne sono strettamente maggiori dei quattro vicini ortogonali.</p>
+      <pre><code>const m = [
+  [4, 7, 2, 6, 1],
+  [3, 9, 5, 8, 2],
+  [1, 6, 4, 7, 3],
+  [2, 5, 8, 4, 1]
+];
+
+let picchi = 0;
+
+for (let r = <select id="q1" class="answer-select" data-answer="1" aria-label="Esercizio 1, spazio 1"><option value="">— scegli —</option><option value="1">1</option><option value="0">0</option><option value="2">2</option><option value="m.length - 1">m.length - 1</option><option value="m[0].length - 1">m[0].length - 1</option></select>; r &lt; <select id="q2" class="answer-select" data-answer="m.length - 1" aria-label="Esercizio 1, spazio 2"><option value="">— scegli —</option><option value="m.length - 2">m.length - 2</option><option value="m.length - 1">m.length - 1</option><option value="m[0].length - 1">m[0].length - 1</option><option value="m.length">m.length</option></select>; r++) {
+  for (let c = <select id="q3" class="answer-select" data-answer="1" aria-label="Esercizio 1, spazio 3"><option value="">— scegli —</option><option value="2">2</option><option value="r + 1">r + 1</option><option value="1">1</option><option value="0">0</option></select>; c &lt; <select id="q4" class="answer-select" data-answer="m[r].length - 1" aria-label="Esercizio 1, spazio 4"><option value="">— scegli —</option><option value="m[r].length - 1">m[r].length - 1</option><option value="m[0].length - 2">m[0].length - 2</option><option value="m[r].length">m[r].length</option><option value="m.length - 1">m.length - 1</option></select>; c++) {
+    const v = m[r][c];
+
+    if (
+      v &gt; m[<select id="q5" class="answer-select" data-answer="r - 1" aria-label="Esercizio 1, spazio 5"><option value="">— scegli —</option><option value="r">r</option><option value="r + 1">r + 1</option><option value="c - 1">c - 1</option><option value="r - 1">r - 1</option></select>][c] &amp;&amp;
+      v &gt; m[r + 1][c] &amp;&amp;
+      v &gt; m[r][c - 1] &amp;&amp;
+      v &gt; m[r][<select id="q6" class="answer-select" data-answer="c + 1" aria-label="Esercizio 1, spazio 6"><option value="">— scegli —</option><option value="r + 1">r + 1</option><option value="c">c</option><option value="c - 1">c - 1</option><option value="c + 1">c + 1</option></select>]
+    ) {
+      picchi++;
+    }
+  }
+}
+
+console.log(picchi);</code></pre>
+      <div class="exercise-feedback" id="feedback-1"></div>
+    </section>
+    
+    <section class="exercise" id="exercise-2">
+      <div class="exercise-head">
+        <div>
+          <span class="eyebrow">ESERCIZIO 2</span>
+          <h2>La stringa a fisarmonica</h2>
+        </div>
+        <div class="exercise-score" id="score-2">0/6</div>
+      </div>
+      <p class="desc">Comprimi una stringa trasformando ogni sequenza di caratteri uguali nel carattere seguito dal numero di occorrenze: <code>aaabbc</code> → <code>a3b2c1</code>.</p>
+      <pre><code>const testo = &quot;aaabccccddaa&quot;;
+let risultato = &quot;&quot;;
+let conteggio = 1;
+
+for (let i = <select id="q7" class="answer-select" data-answer="1" aria-label="Esercizio 2, spazio 1"><option value="">— scegli —</option><option value="testo.length - 1">testo.length - 1</option><option value="2">2</option><option value="0">0</option><option value="1">1</option></select>; i &lt;= testo.length; i++) {
+  if (i &lt; testo.length &amp;&amp; testo[i] === testo[<select id="q8" class="answer-select" data-answer="i - 1" aria-label="Esercizio 2, spazio 2"><option value="">— scegli —</option><option value="i + 1">i + 1</option><option value="i - 1">i - 1</option><option value="i">i</option><option value="0">0</option></select>]) {
+    conteggio<select id="q9" class="answer-select" data-answer="++" aria-label="Esercizio 2, spazio 3"><option value="">— scegli —</option><option value="++">++</option><option value="--">--</option><option value="= 1">= 1</option><option value="+= i">+= i</option></select>;
+  } else {
+    risultato += testo[<select id="q10" class="answer-select" data-answer="i - 1" aria-label="Esercizio 2, spazio 4"><option value="">— scegli —</option><option value="i - 1">i - 1</option><option value="i">i</option><option value="0">0</option><option value="conteggio">conteggio</option></select>] + &quot;&quot; + conteggio;
+    conteggio = <select id="q11" class="answer-select" data-answer="1" aria-label="Esercizio 2, spazio 5"><option value="">— scegli —</option><option value="2">2</option><option value="0">0</option><option value="conteggio + 1">conteggio + 1</option><option value="1">1</option></select>;
+  }
+}
+
+console.log(<select id="q12" class="answer-select" data-answer="risultato" aria-label="Esercizio 2, spazio 6"><option value="">— scegli —</option><option value="conteggio">conteggio</option><option value="testo">testo</option><option value="risultato">risultato</option><option value="testo.length">testo.length</option></select>);</code></pre>
+      <div class="exercise-feedback" id="feedback-2"></div>
+    </section>
+    
+    <section class="exercise" id="exercise-3">
+      <div class="exercise-head">
+        <div>
+          <span class="eyebrow">ESERCIZIO 3</span>
+          <h2>Il caveau circolare</h2>
+        </div>
+        <div class="exercise-score" id="score-3">0/6</div>
+      </div>
+      <p class="desc">Ruota un array verso destra di <code>k</code> posizioni, una posizione alla volta, senza usare metodi avanzati.</p>
+      <pre><code>const codici = [17, 23, 41, 8, 12, 30];
+const k = 2;
+
+for (let giro = 0; giro &lt; <select id="q13" class="answer-select" data-answer="k" aria-label="Esercizio 3, spazio 1"><option value="">— scegli —</option><option value="k - 1">k - 1</option><option value="1">1</option><option value="k">k</option><option value="codici.length">codici.length</option></select>; giro++) {
+  const ultimo = codici[<select id="q14" class="answer-select" data-answer="codici.length - 1" aria-label="Esercizio 3, spazio 2"><option value="">— scegli —</option><option value="0">0</option><option value="codici.length">codici.length</option><option value="k">k</option><option value="codici.length - 1">codici.length - 1</option></select>];
+
+  for (let i = codici.length - 1; i &gt; <select id="q15" class="answer-select" data-answer="0" aria-label="Esercizio 3, spazio 3"><option value="">— scegli —</option><option value="0">0</option><option value="1">1</option><option value="-1">-1</option><option value="k">k</option></select>; i--) {
+    codici[i] = codici[<select id="q16" class="answer-select" data-answer="i - 1" aria-label="Esercizio 3, spazio 4"><option value="">— scegli —</option><option value="i - 1">i - 1</option><option value="i + 1">i + 1</option><option value="codici.length - 1">codici.length - 1</option><option value="0">0</option></select>];
+  }
+
+  codici[<select id="q17" class="answer-select" data-answer="0" aria-label="Esercizio 3, spazio 5"><option value="">— scegli —</option><option value="0">0</option><option value="k">k</option><option value="1">1</option><option value="codici.length - 1">codici.length - 1</option></select>] = ultimo;
+}
+
+console.log(codici[<select id="q18" class="answer-select" data-answer="0" aria-label="Esercizio 3, spazio 6"><option value="">— scegli —</option><option value="k">k</option><option value="0">0</option><option value="codici.length - 1">codici.length - 1</option><option value="1">1</option></select>]);</code></pre>
+      <div class="exercise-feedback" id="feedback-3"></div>
+    </section>
+    
+    <section class="exercise" id="exercise-4">
+      <div class="exercise-head">
+        <div>
+          <span class="eyebrow">ESERCIZIO 4</span>
+          <h2>Il codice della cassaforte quantistica</h2>
+        </div>
+        <div class="exercise-score" id="score-4">0/6</div>
+      </div>
+      <p class="desc">Genera un codice di 6 cifre casuali, ma accetta solo cifre diverse dalla precedente. La prima cifra può essere qualunque.</p>
+      <pre><code>let codice = &quot;&quot;;
+let precedente = -1;
+
+while (codice.length &lt; <select id="q19" class="answer-select" data-answer="6" aria-label="Esercizio 4, spazio 1"><option value="">— scegli —</option><option value="6">6</option><option value="5">5</option><option value="7">7</option><option value="10">10</option></select>) {
+  const cifra = Math.floor(Math.random() * <select id="q20" class="answer-select" data-answer="10" aria-label="Esercizio 4, spazio 2"><option value="">— scegli —</option><option value="6">6</option><option value="11">11</option><option value="10">10</option><option value="9">9</option></select>);
+
+  if (cifra <select id="q21" class="answer-select" data-answer="!==" aria-label="Esercizio 4, spazio 3"><option value="">— scegli —</option><option value="===">===</option><option value="!==">!==</option><option value="&gt;">&gt;</option><option value="&lt;">&lt;</option></select> precedente) {
+    codice += <select id="q22" class="answer-select" data-answer="cifra" aria-label="Esercizio 4, spazio 4"><option value="">— scegli —</option><option value="precedente">precedente</option><option value="&quot;cifra&quot;">&quot;cifra&quot;</option><option value="cifra">cifra</option><option value="1">1</option></select>;
+    precedente = <select id="q23" class="answer-select" data-answer="cifra" aria-label="Esercizio 4, spazio 5"><option value="">— scegli —</option><option value="cifra">cifra</option><option value="precedente + 1">precedente + 1</option><option value="codice">codice</option><option value="codice.length">codice.length</option></select>;
+  }
+}
+
+console.log(codice.length === <select id="q24" class="answer-select" data-answer="6" aria-label="Esercizio 4, spazio 6"><option value="">— scegli —</option><option value="7">7</option><option value="6">6</option><option value="5">5</option><option value="10">10</option></select>);</code></pre>
+      <div class="exercise-feedback" id="feedback-4"></div>
+    </section>
+    
+    <section class="exercise" id="exercise-5">
+      <div class="exercise-head">
+        <div>
+          <span class="eyebrow">ESERCIZIO 5</span>
+          <h2>Il magazzino dell&#x27;alchimista</h2>
+        </div>
+        <div class="exercise-score" id="score-5">0/6</div>
+      </div>
+      <p class="desc">Un oggetto gestisce le scorte. Il metodo <code>preleva</code> deve diminuire la quantità solo se il prodotto esiste e la scorta è sufficiente.</p>
+      <pre><code>const magazzino = {
+  scorte: {
+    &quot;occhio-di-drago&quot;: 8,
+    &quot;polvere-lunare&quot;: 5,
+    &quot;radice-nera&quot;: 12
+  },
+
+  preleva: function(nome, qta) {
+    if (
+      this.scorte[nome] <select id="q25" class="answer-select" data-answer="!== undefined" aria-label="Esercizio 5, spazio 1"><option value="">— scegli —</option><option value="=== undefined">=== undefined</option><option value="=== qta">=== qta</option><option value="&gt; 0">&gt; 0</option><option value="!== undefined">!== undefined</option></select> &amp;&amp;
+      this.scorte[nome] &gt;= <select id="q26" class="answer-select" data-answer="qta" aria-label="Esercizio 5, spazio 2"><option value="">— scegli —</option><option value="0">0</option><option value="qta">qta</option><option value="this.scorte[nome]">this.scorte[nome]</option><option value="1">1</option></select>
+    ) {
+      this.scorte[nome] <select id="q27" class="answer-select" data-answer="-= qta" aria-label="Esercizio 5, spazio 3"><option value="">— scegli —</option><option value="-= qta">-= qta</option><option value="+= qta">+= qta</option><option value="--">--</option><option value="= qta">= qta</option></select>;
+      return <select id="q28" class="answer-select" data-answer="true" aria-label="Esercizio 5, spazio 4"><option value="">— scegli —</option><option value="true">true</option><option value="qta">qta</option><option value="nome">nome</option><option value="false">false</option></select>;
+    }
+
+    return <select id="q29" class="answer-select" data-answer="false" aria-label="Esercizio 5, spazio 5"><option value="">— scegli —</option><option value="undefined">undefined</option><option value="false">false</option><option value="true">true</option><option value="0">0</option></select>;
+  }
+};
+
+const ok = magazzino.preleva(&quot;polvere-lunare&quot;, 3);
+console.log(ok &amp;&amp; magazzino.scorte[&quot;polvere-lunare&quot;] === <select id="q30" class="answer-select" data-answer="2" aria-label="Esercizio 5, spazio 6"><option value="">— scegli —</option><option value="2">2</option><option value="3">3</option><option value="5">5</option><option value="8">8</option></select>);</code></pre>
+      <div class="exercise-feedback" id="feedback-5"></div>
+    </section>
+    
+    <section class="exercise" id="exercise-6">
+      <div class="exercise-head">
+        <div>
+          <span class="eyebrow">ESERCIZIO 6</span>
+          <h2>Il perimetro della fortezza</h2>
+        </div>
+        <div class="exercise-score" id="score-6">0/6</div>
+      </div>
+      <p class="desc">Somma soltanto gli elementi sul bordo di una matrice rettangolare, evitando di contare due volte gli angoli.</p>
+      <pre><code>const a = [
+  [2, 4, 6, 8],
+  [1, 3, 5, 7],
+  [9, 2, 4, 6],
+  [5, 1, 8, 3]
+];
+
+let somma = 0;
+
+for (let r = 0; r &lt; a.length; r++) {
+  for (let c = 0; c &lt; a[r].length; c++) {
+    if (
+      r === <select id="q31" class="answer-select" data-answer="0" aria-label="Esercizio 6, spazio 1"><option value="">— scegli —</option><option value="0">0</option><option value="a.length">a.length</option><option value="c">c</option><option value="1">1</option></select> ||
+      r === a.length - <select id="q32" class="answer-select" data-answer="1" aria-label="Esercizio 6, spazio 2"><option value="">— scegli —</option><option value="c">c</option><option value="2">2</option><option value="0">0</option><option value="1">1</option></select> ||
+      c === <select id="q33" class="answer-select" data-answer="0" aria-label="Esercizio 6, spazio 3"><option value="">— scegli —</option><option value="r">r</option><option value="a[r].length">a[r].length</option><option value="0">0</option><option value="1">1</option></select> ||
+      c === a[r].length - <select id="q34" class="answer-select" data-answer="1" aria-label="Esercizio 6, spazio 4"><option value="">— scegli —</option><option value="r">r</option><option value="0">0</option><option value="2">2</option><option value="1">1</option></select>
+    ) {
+      somma <select id="q35" class="answer-select" data-answer="+= a[r][c]" aria-label="Esercizio 6, spazio 5"><option value="">— scegli —</option><option value="+= a[r][c]">+= a[r][c]</option><option value="++">++</option><option value="+= r + c">+= r + c</option><option value="= a[r][c]">= a[r][c]</option></select>;
+    }
+  }
+}
+
+console.log(somma <select id="q36" class="answer-select" data-answer="=== 60" aria-label="Esercizio 6, spazio 6"><option value="">— scegli —</option><option value="=== 70">=== 70</option><option value="=== 60">=== 60</option><option value="&gt; 66">&gt; 66</option><option value="=== 58">=== 58</option></select>);</code></pre>
+      <div class="exercise-feedback" id="feedback-6"></div>
+    </section>
+    
+    <section class="exercise" id="exercise-7">
+      <div class="exercise-head">
+        <div>
+          <span class="eyebrow">ESERCIZIO 7</span>
+          <h2>I gemelli primi</h2>
+        </div>
+        <div class="exercise-score" id="score-7">0/6</div>
+      </div>
+      <p class="desc">Conta quante coppie di numeri primi gemelli esistono tra 2 e 50. Due primi sono gemelli se differiscono di 2.</p>
+      <pre><code>function primo(n) {
+  if (n &lt; 2) return false;
+
+  for (let d = 2; d * d &lt;= <select id="q37" class="answer-select" data-answer="n" aria-label="Esercizio 7, spazio 1"><option value="">— scegli —</option><option value="Math.sqrt(n)">Math.sqrt(n)</option><option value="50">50</option><option value="n - 1">n - 1</option><option value="n">n</option></select>; d++) {
+    if (n % d === <select id="q38" class="answer-select" data-answer="0" aria-label="Esercizio 7, spazio 2"><option value="">— scegli —</option><option value="0">0</option><option value="n">n</option><option value="1">1</option><option value="d">d</option></select>) {
+      return false;
+    }
+  }
+
+  return <select id="q39" class="answer-select" data-answer="true" aria-label="Esercizio 7, spazio 3"><option value="">— scegli —</option><option value="n">n</option><option value="1">1</option><option value="false">false</option><option value="true">true</option></select>;
+}
+
+let coppie = 0;
+
+for (let n = 2; n &lt;= <select id="q40" class="answer-select" data-answer="48" aria-label="Esercizio 7, spazio 4"><option value="">— scegli —</option><option value="48">48</option><option value="52">52</option><option value="49">49</option><option value="50">50</option></select>; n++) {
+  if (primo(n) &amp;&amp; primo(n + <select id="q41" class="answer-select" data-answer="2" aria-label="Esercizio 7, spazio 5"><option value="">— scegli —</option><option value="3">3</option><option value="2">2</option><option value="1">1</option><option value="n">n</option></select>)) {
+    coppie++;
+  }
+}
+
+console.log(coppie === <select id="q42" class="answer-select" data-answer="6" aria-label="Esercizio 7, spazio 6"><option value="">— scegli —</option><option value="5">5</option><option value="8">8</option><option value="6">6</option><option value="7">7</option></select>);</code></pre>
+      <div class="exercise-feedback" id="feedback-7"></div>
+    </section>
+    
+    <section class="exercise" id="exercise-8">
+      <div class="exercise-head">
+        <div>
+          <span class="eyebrow">ESERCIZIO 8</span>
+          <h2>La sentinella termica</h2>
+        </div>
+        <div class="exercise-score" id="score-8">0/6</div>
+      </div>
+      <p class="desc">Trova la lunghezza della più lunga sequenza consecutiva di temperature strettamente crescenti.</p>
+      <pre><code>const t = [12, 15, 18, 17, 19, 21, 23, 20, 22];
+
+let corrente = 1;
+let massima = <select id="q43" class="answer-select" data-answer="1" aria-label="Esercizio 8, spazio 1"><option value="">— scegli —</option><option value="t.length">t.length</option><option value="1">1</option><option value="t[0]">t[0]</option><option value="0">0</option></select>;
+
+for (let i = 1; i &lt; t.length; i++) {
+  if (t[i] <select id="q44" class="answer-select" data-answer="&gt;" aria-label="Esercizio 8, spazio 2"><option value="">— scegli —</option><option value="===">===</option><option value="&lt;">&lt;</option><option value="&gt;=">&gt;=</option><option value="&gt;">&gt;</option></select> t[i - 1]) {
+    corrente<select id="q45" class="answer-select" data-answer="++" aria-label="Esercizio 8, spazio 3"><option value="">— scegli —</option><option value="+= i">+= i</option><option value="--">--</option><option value="= 1">= 1</option><option value="++">++</option></select>;
+  } else {
+    corrente = <select id="q46" class="answer-select" data-answer="1" aria-label="Esercizio 8, spazio 4"><option value="">— scegli —</option><option value="0">0</option><option value="2">2</option><option value="1">1</option><option value="massima">massima</option></select>;
+  }
+
+  if (corrente &gt; massima) {
+    massima = <select id="q47" class="answer-select" data-answer="corrente" aria-label="Esercizio 8, spazio 5"><option value="">— scegli —</option><option value="t[i]">t[i]</option><option value="massima + 1">massima + 1</option><option value="i">i</option><option value="corrente">corrente</option></select>;
+  }
+}
+
+console.log(massima === <select id="q48" class="answer-select" data-answer="4" aria-label="Esercizio 8, spazio 6"><option value="">— scegli —</option><option value="6">6</option><option value="4">4</option><option value="5">5</option><option value="3">3</option></select>);</code></pre>
+      <div class="exercise-feedback" id="feedback-8"></div>
+    </section>
+    
+    <section class="exercise" id="exercise-9">
+      <div class="exercise-head">
+        <div>
+          <span class="eyebrow">ESERCIZIO 9</span>
+          <h2>Il campo minato</h2>
+        </div>
+        <div class="exercise-score" id="score-9">0/6</div>
+      </div>
+      <p class="desc">Data una matrice 0/1, conta quante mine circondano la cella centrale <code>(r,c)</code>, considerando le 8 celle adiacenti.</p>
+      <pre><code>const campo = [
+  [0, 1, 0, 0],
+  [1, 0, 1, 0],
+  [0, 1, 0, 1],
+  [0, 0, 1, 0]
+];
+
+const r = 1;
+const c = 1;
+let mine = 0;
+
+for (let dr = <select id="q49" class="answer-select" data-answer="-1" aria-label="Esercizio 9, spazio 1"><option value="">— scegli —</option><option value="-2">-2</option><option value="1">1</option><option value="0">0</option><option value="-1">-1</option></select>; dr &lt;= 1; dr++) {
+  for (let dc = -1; dc &lt;= <select id="q50" class="answer-select" data-answer="1" aria-label="Esercizio 9, spazio 2"><option value="">— scegli —</option><option value="0">0</option><option value="1">1</option><option value="campo.length">campo.length</option><option value="2">2</option></select>; dc++) {
+    if (dr === 0 &amp;&amp; dc === <select id="q51" class="answer-select" data-answer="0" aria-label="Esercizio 9, spazio 3"><option value="">— scegli —</option><option value="1">1</option><option value="c">c</option><option value="0">0</option><option value="-1">-1</option></select>) continue;
+
+    const nr = r + <select id="q52" class="answer-select" data-answer="dr" aria-label="Esercizio 9, spazio 4"><option value="">— scegli —</option><option value="1">1</option><option value="r">r</option><option value="dr">dr</option><option value="dc">dc</option></select>;
+    const nc = c + <select id="q53" class="answer-select" data-answer="dc" aria-label="Esercizio 9, spazio 5"><option value="">— scegli —</option><option value="dc">dc</option><option value="dr">dr</option><option value="1">1</option><option value="c">c</option></select>;
+
+    if (
+      nr &gt;= 0 &amp;&amp; nr &lt; campo.length &amp;&amp;
+      nc &gt;= 0 &amp;&amp; nc &lt; campo[nr].length
+    ) {
+      mine += campo[<select id="q54" class="answer-select" data-answer="nr" aria-label="Esercizio 9, spazio 6"><option value="">— scegli —</option><option value="nr">nr</option><option value="dr">dr</option><option value="r">r</option><option value="nc">nc</option></select>][nc];
+    }
+  }
+}
+
+console.log(mine);</code></pre>
+      <div class="exercise-feedback" id="feedback-9"></div>
+    </section>
+    
+    <section class="exercise" id="exercise-10">
+      <div class="exercise-head">
+        <div>
+          <span class="eyebrow">ESERCIZIO 10</span>
+          <h2>La graduatoria dei pirati</h2>
+        </div>
+        <div class="exercise-score" id="score-10">0/7</div>
+      </div>
+      <p class="desc">Ordina i punteggi in ordine decrescente con selection sort, senza usare <code>sort()</code>. A ogni passaggio va portato in posizione il massimo della parte non ordinata.</p>
+      <pre><code>const punti = [31, 44, 12, 58, 27, 49];
+
+for (let i = 0; i &lt; punti.length - 1; i++) {
+  let indiceMax = <select id="q55" class="answer-select" data-answer="i" aria-label="Esercizio 10, spazio 1"><option value="">— scegli —</option><option value="i + 1">i + 1</option><option value="i">i</option><option value="0">0</option><option value="punti.length - 1">punti.length - 1</option></select>;
+
+  for (let j = i + 1; j &lt; punti.length; j++) {
+    if (punti[j] <select id="q56" class="answer-select" data-answer="&gt;" aria-label="Esercizio 10, spazio 2"><option value="">— scegli —</option><option value="&gt;">&gt;</option><option value="&gt;=">&gt;=</option><option value="&lt;">&lt;</option><option value="===">===</option></select> punti[indiceMax]) {
+      indiceMax = <select id="q57" class="answer-select" data-answer="j" aria-label="Esercizio 10, spazio 3"><option value="">— scegli —</option><option value="indiceMax + 1">indiceMax + 1</option><option value="j">j</option><option value="i">i</option><option value="punti[j]">punti[j]</option></select>;
+    }
+  }
+
+  const tmp = punti[<select id="q58" class="answer-select" data-answer="i" aria-label="Esercizio 10, spazio 4"><option value="">— scegli —</option><option value="0">0</option><option value="i">i</option><option value="punti.length - 1">punti.length - 1</option><option value="indiceMax">indiceMax</option></select>];
+  punti[i] = punti[<select id="q59" class="answer-select" data-answer="indiceMax" aria-label="Esercizio 10, spazio 5"><option value="">— scegli —</option><option value="0">0</option><option value="indiceMax">indiceMax</option><option value="i">i</option><option value="i + 1">i + 1</option></select>];
+  punti[indiceMax] = <select id="q60" class="answer-select" data-answer="tmp" aria-label="Esercizio 10, spazio 6"><option value="">— scegli —</option><option value="punti[i]">punti[i]</option><option value="j">j</option><option value="indiceMax">indiceMax</option><option value="tmp">tmp</option></select>;
+}
+
+console.log(punti[0] === <select id="q61" class="answer-select" data-answer="58" aria-label="Esercizio 10, spazio 7"><option value="">— scegli —</option><option value="58">58</option><option value="31">31</option><option value="49">49</option><option value="44">44</option></select>);</code></pre>
+      <div class="exercise-feedback" id="feedback-10"></div>
+    </section>
+    
+
+  <section class="result-panel" id="resultPanel">
+    <h3 id="resultTitle">Risultato</h3>
+    <p id="resultText"></p>
+    <div class="progress"><div id="progressBar"></div></div>
+    <div class="legend">
+      <span><span class="dot ok"></span>corretta</span>
+      <span><span class="dot bad"></span>errata</span>
+      <span><span class="dot warn"></span>non risposta</span>
+    </div>
+  </section>
+
+  <footer>
+    Pagina autonoma: puoi salvarla e aprirla direttamente nel browser, senza connessione.
+  </footer>
+</div>
+
+<script>
+(function () {
+  const selects = [...document.querySelectorAll(".answer-select")];
+  const checkBtn = document.getElementById("checkBtn");
+  const resetBtn = document.getElementById("resetBtn");
+  const globalScore = document.getElementById("globalScore");
+  const panel = document.getElementById("resultPanel");
+  const resultTitle = document.getElementById("resultTitle");
+  const resultText = document.getElementById("resultText");
+  const progressBar = document.getElementById("progressBar");
+
+  function exerciseSelects(index) {
+    return [...document.querySelectorAll("#exercise-" + index + " .answer-select")];
+  }
+
+  function clearState(select) {
+    select.classList.remove("correct", "wrong", "unanswered");
+  }
+
+  selects.forEach(select => {
+    select.addEventListener("change", () => {
+      clearState(select);
+    });
+  });
+
+  checkBtn.addEventListener("click", () => {
+    let correct = 0;
+    let unanswered = 0;
+
+    selects.forEach(select => {
+      clearState(select);
+      const value = select.value;
+      const answer = select.dataset.answer;
+
+      if (value === "") {
+        select.classList.add("unanswered");
+        unanswered++;
+      } else if (value === answer) {
+        select.classList.add("correct");
+        correct++;
+      } else {
+        select.classList.add("wrong");
+      }
+    });
+
+    for (let i = 1; i <= 10; i++) {
+      const group = exerciseSelects(i);
+      let ok = 0;
+      let empty = 0;
+
+      group.forEach(s => {
+        if (s.value === "") empty++;
+        if (s.value !== "" && s.value === s.dataset.answer) ok++;
+      });
+
+      document.getElementById("score-" + i).textContent = ok + "/" + group.length;
+
+      const fb = document.getElementById("feedback-" + i);
+      fb.className = "exercise-feedback";
+
+      if (empty > 0) {
+        fb.textContent = "Mancano " + empty + " risposte. Corrette finora: " + ok + "/" + group.length + ".";
+        fb.classList.add("warn");
+      } else if (ok === group.length) {
+        fb.textContent = "Perfetto: esercizio completato senza errori.";
+        fb.classList.add("ok");
+      } else {
+        fb.textContent = "Corrette " + ok + " su " + group.length + ". Le tendine rosse vanno riviste.";
+        fb.classList.add("bad");
+      }
+    }
+
+    const total = selects.length;
+    const percent = Math.round((correct / total) * 100);
+    globalScore.textContent = "Punteggio: " + correct + " / " + total + " (" + percent + "%)";
+
+    panel.classList.add("show");
+    progressBar.style.width = percent + "%";
+
+    if (unanswered > 0) {
+      resultTitle.textContent = "Correzione parziale";
+      resultText.textContent =
+        "Hai " + correct + " risposte corrette su " + total +
+        ". Restano " + unanswered + " tendine senza risposta.";
+    } else if (percent === 100) {
+      resultTitle.textContent = "10/10. Macchina da guerra.";
+      resultText.textContent =
+        "Tutte le " + total + " scelte sono corrette. Nessuna concessione del compilatore.";
+    } else if (percent >= 85) {
+      resultTitle.textContent = "Ottimo risultato";
+      resultText.textContent =
+        correct + " risposte corrette su " + total +
+        ". Gli errori rimasti sono evidenziati in rosso.";
+    } else if (percent >= 65) {
+      resultTitle.textContent = "Buona base, ma c'è da fare debug";
+      resultText.textContent =
+        correct + " risposte corrette su " + total +
+        ". Concentrati soprattutto sui passaggi di indice e sulle condizioni.";
+    } else {
+      resultTitle.textContent = "Debug intensivo consigliato";
+      resultText.textContent =
+        correct + " risposte corrette su " + total +
+        ". Le tendine evidenziate indicano esattamente dove intervenire.";
+    }
+
+    panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+
+  resetBtn.addEventListener("click", () => {
+    selects.forEach(select => {
+      select.value = "";
+      clearState(select);
+    });
+
+    for (let i = 1; i <= 10; i++) {
+      const group = exerciseSelects(i);
+      document.getElementById("score-" + i).textContent = "0/" + group.length;
+      const fb = document.getElementById("feedback-" + i);
+      fb.textContent = "";
+      fb.className = "exercise-feedback";
+    }
+
+    globalScore.textContent = "Punteggio: — / " + selects.length;
+    progressBar.style.width = "0%";
+    panel.classList.remove("show");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+})();
+</script>
+</body>
+</html>

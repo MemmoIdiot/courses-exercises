@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz sulle Infografiche — 50 domande</title>
+<style>
+  :root{
+    --bg:#f4f6f8;
+    --card:#ffffff;
+    --text:#1f2937;
+    --muted:#64748b;
+    --border:#dbe2ea;
+    --accent:#2563eb;
+    --accent-soft:#eff6ff;
+    --ok:#15803d;
+    --ok-bg:#f0fdf4;
+    --bad:#b91c1c;
+    --bad-bg:#fef2f2;
+    --warn:#a16207;
+    --warn-bg:#fefce8;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.55;
+  }
+  .hero{
+    background:linear-gradient(135deg,#0f172a,#1d4ed8);
+    color:#fff;
+    padding:42px 20px 34px;
+  }
+  .hero-inner,.container{max-width:1050px;margin:auto}
+  h1{margin:0 0 8px;font-size:clamp(2rem,4vw,3rem)}
+  .subtitle{margin:0;max-width:800px;color:#dbeafe;font-size:1.05rem}
+  .toolbar{
+    max-width:1050px;
+    margin:-18px auto 28px;
+    padding:0 20px;
+  }
+  .toolbar-inner{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(15,23,42,.08);
+    padding:16px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .stat{
+    padding:8px 12px;
+    border-radius:10px;
+    background:#f8fafc;
+    font-weight:700;
+  }
+  button{
+    border:0;
+    border-radius:10px;
+    padding:10px 15px;
+    font-weight:700;
+    cursor:pointer;
+    font-size:.95rem;
+  }
+  button.primary{background:var(--accent);color:white}
+  button.secondary{background:#e2e8f0;color:#0f172a}
+  button:hover{filter:brightness(.97)}
+  .container{padding:0 20px 50px}
+  .section-title{
+    margin:34px 0 16px;
+    font-size:1.25rem;
+    padding-bottom:8px;
+    border-bottom:2px solid #cbd5e1;
+  }
+  .question{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    margin:16px 0;
+    padding:20px;
+    box-shadow:0 5px 16px rgba(15,23,42,.035);
+  }
+  .question.correct{border-color:#86efac;background:linear-gradient(0deg,#fff,var(--ok-bg))}
+  .question.incorrect{border-color:#fecaca;background:linear-gradient(0deg,#fff,var(--bad-bg))}
+  .qmeta{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:8px;
+  }
+  .badge{
+    font-size:.78rem;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+    color:#1e40af;
+    background:#dbeafe;
+    border-radius:999px;
+    padding:3px 9px;
+  }
+  .qnumber{
+    color:var(--muted);
+    font-size:.85rem;
+    font-weight:700;
+  }
+  .qtext{font-weight:750;font-size:1.04rem;margin:8px 0 14px}
+  .options{display:grid;gap:9px}
+  label.option{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 12px;
+    cursor:pointer;
+    background:#fff;
+  }
+  label.option:hover{background:#f8fafc}
+  label.option.good{
+    border-color:#86efac;
+    background:var(--ok-bg);
+  }
+  label.option.bad{
+    border-color:#fca5a5;
+    background:var(--bad-bg);
+  }
+  input[type=radio]{margin-top:4px;transform:scale(1.12)}
+  .feedback{
+    display:none;
+    margin-top:12px;
+    border-radius:10px;
+    padding:10px 12px;
+    font-size:.93rem;
+  }
+  .feedback.show{display:block}
+  .feedback.ok{background:var(--ok-bg);color:#166534}
+  .feedback.bad{background:var(--bad-bg);color:#991b1b}
+  .feedback.warn{background:var(--warn-bg);color:#854d0e}
+  .question-actions{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+  .validate{background:#e0e7ff;color:#3730a3}
+  .explain{
+    display:none;
+    margin-top:10px;
+    color:#475569;
+    border-left:3px solid #94a3b8;
+    padding-left:11px;
+  }
+  .explain.show{display:block}
+  .result{
+    display:none;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:22px;
+    margin:25px 0;
+    box-shadow:0 10px 25px rgba(15,23,42,.06);
+  }
+  .result.show{display:block}
+  .score-big{font-size:2rem;font-weight:900;margin:4px 0}
+  .progress{
+    height:12px;
+    background:#e2e8f0;
+    overflow:hidden;
+    border-radius:999px;
+    margin:12px 0;
+  }
+  .bar{height:100%;width:0;background:#2563eb;transition:width .35s}
+  .footer-note{color:var(--muted);font-size:.9rem;margin-top:30px}
+  @media(max-width:600px){
+    .toolbar-inner{align-items:stretch}
+    .toolbar-inner button{width:100%}
+    .stat{width:100%}
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-inner">
+    <h1>Infographics — Quiz interattivo</h1>
+    <p class="subtitle">50 domande a scelta multipla su storia dell'infografica, visualizzazione dei dati, tipologie di visualizzazione e dati dinamici/interattivi.</p>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="stat">Risposte: <span id="answeredCount">0</span>/50</div>
+    <div class="stat">Corrette validate: <span id="correctCount">0</span></div>
+    <button class="primary" onclick="validateAll()">Valida tutto</button>
+    <button class="secondary" onclick="resetQuiz()">Ricomincia</button>
+  </div>
+</div>
+
+<main class="container">
+  <div id="result" class="result">
+    <div>Risultato complessivo</div>
+    <div class="score-big"><span id="score">0</span>/50 — <span id="percentage">0</span>%</div>
+    <div class="progress"><div id="progressBar" class="bar"></div></div>
+    <div id="assessment"></div>
+  </div>
+  <div id="quiz"></div>
+  <p class="footer-note">Le domande vengono mostrate in ordine fisso, mentre le opzioni sono distribuite in modo variato. Ogni quesito può essere validato singolarmente oppure insieme agli altri.</p>
+</main>
+
+<script>
+const questions = [
+  {
+    category:"Storia",
+    q:"Quale opera di William Playfair, pubblicata nel 1786, è considerata fondamentale nella storia della visualizzazione statistica?",
+    options:["The Commercial and Political Atlas","Principia Mathematica","The Grammar of Ornament","Micrographia"],
+    answer:0,
+    explanation:"William Playfair introdusse e rese sistematici grafici come il grafico a barre e il grafico a linee nel suo The Commercial and Political Atlas."
+  },
+  {
+    category:"Storia",
+    q:"A quale autore viene generalmente attribuita l'invenzione del grafico a torta all'inizio del XIX secolo?",
+    options:["John Snow","William Playfair","Otto Neurath","Florence Nightingale"],
+    answer:1,
+    explanation:"William Playfair utilizzò nel 1801 una forma primitiva di grafico a torta nel suo Statistical Breviary."
+  },
+  {
+    category:"Storia",
+    q:"La celebre mappa di John Snow del 1854 fu utilizzata per studiare:",
+    options:["la diffusione del colera a Londra","i flussi migratori in Europa","le perdite dell'esercito napoleonico","la crescita industriale britannica"],
+    answer:0,
+    explanation:"Snow mappò i decessi per colera nel quartiere di Soho e ne evidenziò la concentrazione intorno alla pompa di Broad Street."
+  },
+  {
+    category:"Storia",
+    q:"Quale figura storica rese celebre un diagramma polare per mostrare le cause di mortalità dei soldati durante la guerra di Crimea?",
+    options:["Marie Curie","Florence Nightingale","Ada Lovelace","Dorothy Vaughan"],
+    answer:1,
+    explanation:"Florence Nightingale usò diagrammi polari, spesso chiamati coxcomb charts, per comunicare efficacemente dati sanitari."
+  },
+  {
+    category:"Storia",
+    q:"La carta di Charles Joseph Minard sulla campagna di Russia di Napoleone del 1812 è famosa soprattutto perché:",
+    options:["usa esclusivamente un grafico a torta","integra diverse variabili in una singola rappresentazione","mostra soltanto dati geografici","elimina completamente la dimensione temporale"],
+    answer:1,
+    explanation:"La visualizzazione di Minard combina dimensione dell'esercito, posizione geografica, direzione, distanza, tempo e temperatura."
+  },
+  {
+    category:"Storia",
+    q:"Il sistema ISOTYPE sviluppato da Otto Neurath aveva come obiettivo principale:",
+    options:["visualizzare dati mediante simboli pittografici standardizzati","sostituire i grafici con equazioni matematiche","produrre esclusivamente cartografia topografica","creare diagrammi tridimensionali fotorealistici"],
+    answer:0,
+    explanation:"ISOTYPE, International System of Typographic Picture Education, impiegava pittogrammi standardizzati per rendere i dati accessibili a un pubblico ampio."
+  },
+  {
+    category:"Storia",
+    q:"Chi collaborò strettamente con Otto Neurath allo sviluppo del linguaggio visivo ISOTYPE, progettandone molti pittogrammi?",
+    options:["Gerd Arntz","Edward Tufte","Jacques Bertin","Nigel Holmes"],
+    answer:0,
+    explanation:"Il grafico Gerd Arntz progettò migliaia di pittogrammi utilizzati nel sistema ISOTYPE."
+  },
+  {
+    category:"Storia",
+    q:"Jacques Bertin è particolarmente importante per la teoria della visualizzazione perché elaborò:",
+    options:["la teoria delle variabili visuali","il formato SVG","la prima dashboard web","il concetto di database relazionale"],
+    answer:0,
+    explanation:"Nel volume Sémiologie graphique, Bertin sistematizzò variabili visuali quali posizione, dimensione, forma, valore, colore, orientamento e texture."
+  },
+  {
+    category:"Storia",
+    q:"Edward Tufte è noto soprattutto per aver promosso:",
+    options:["un'elevata densità informativa e la riduzione del chartjunk","l'uso obbligatorio del 3D nei grafici","la sostituzione dei dati con immagini decorative","l'eliminazione delle scale quantitative"],
+    answer:0,
+    explanation:"Tufte ha criticato il chartjunk e sostenuto visualizzazioni dense di informazione, chiare e proporzionate ai dati."
+  },
+  {
+    category:"Storia",
+    q:"Il termine chartjunk indica:",
+    options:["elementi grafici decorativi che non aiutano a comprendere i dati","un archivio di grafici storici","un errore nel database sorgente","una tecnica per comprimere file SVG"],
+    answer:0,
+    explanation:"Chartjunk è un termine associato a Tufte per indicare decorazioni o effetti visivi che introducono rumore senza migliorare l'informazione."
+  },
+
+  {
+    category:"Visualizzazione dati",
+    q:"In una visualizzazione quantitativa, quale canale visivo è generalmente più accurato per confrontare valori numerici?",
+    options:["posizione lungo una scala comune","volume tridimensionale","intensità di una texture complessa","forma di un simbolo"],
+    answer:0,
+    explanation:"La posizione su una scala comune consente confronti quantitativi molto precisi rispetto ad area, volume, colore o forma."
+  },
+  {
+    category:"Visualizzazione dati",
+    q:"Per confrontare le vendite di cinque categorie indipendenti in un singolo anno, quale grafico è generalmente più appropriato?",
+    options:["grafico a barre","grafico a dispersione","diagramma di Sankey","mappa coropletica"],
+    answer:0,
+    explanation:"Il grafico a barre è adatto al confronto diretto tra categorie discrete."
+  },
+  {
+    category:"Visualizzazione dati",
+    q:"Qual è la funzione principale di una scala in un grafico?",
+    options:["mappare valori dei dati su posizioni o proprietà visive","decorare l'area del grafico","indicare il copyright","sostituire la legenda"],
+    answer:0,
+    explanation:"Una scala definisce la corrispondenza tra dominio dei dati e rappresentazione visiva, ad esempio coordinate, dimensioni o colori."
+  },
+  {
+    category:"Visualizzazione dati",
+    q:"Perché troncare l'asse Y in un grafico a barre può essere fuorviante?",
+    options:["può amplificare visivamente differenze relativamente piccole","rende i valori sempre illeggibili","impedisce l'uso di colori","trasforma il grafico in una tabella"],
+    answer:0,
+    explanation:"Poiché la lunghezza delle barre codifica il valore, una base diversa da zero può rendere differenze modeste visivamente molto più grandi."
+  },
+  {
+    category:"Visualizzazione dati",
+    q:"Un buon titolo informativo per una visualizzazione dovrebbe:",
+    options:["aiutare a comprendere il messaggio o il contenuto del grafico","essere sempre composto da una sola parola","evitare qualunque riferimento ai dati","sostituire le etichette degli assi"],
+    answer:0,
+    explanation:"Il titolo deve orientare la lettura e, quando opportuno, esplicitare il fenomeno o la relazione rappresentata."
+  },
+  {
+    category:"Visualizzazione dati",
+    q:"La normalizzazione dei dati è particolarmente utile quando:",
+    options:["si vogliono confrontare grandezze espresse su scale diverse","si devono eliminare tutte le categorie","si vuole trasformare ogni valore in testo","i dati non hanno alcuna unità di misura"],
+    answer:0,
+    explanation:"Normalizzare consente di rendere confrontabili variabili con scale o ordini di grandezza differenti."
+  },
+  {
+    category:"Visualizzazione dati",
+    q:"Quale principio aiuta maggiormente a ridurre il sovraccarico visivo?",
+    options:["rimuovere elementi non funzionali alla lettura","aggiungere più colori possibili","usare sempre grafici 3D","moltiplicare il numero di font"],
+    answer:0,
+    explanation:"La riduzione degli elementi non informativi migliora il rapporto segnale-rumore della visualizzazione."
+  },
+  {
+    category:"Visualizzazione dati",
+    q:"Una legenda è necessaria soprattutto quando:",
+    options:["colori, simboli o pattern devono essere associati a categorie o serie","il grafico contiene un solo valore chiaramente etichettato","il titolo è troppo breve","la pagina contiene un margine bianco"],
+    answer:0,
+    explanation:"La legenda spiega la codifica visiva quando l'associazione tra segni grafici e dati non è già evidente o direttamente etichettata."
+  },
+  {
+    category:"Visualizzazione dati",
+    q:"Per una variabile quantitativa continua, quale tipo di scala cromatica è normalmente appropriato?",
+    options:["sequenziale","nominale casuale","categorica senza ordine","basata soltanto sulla forma"],
+    answer:0,
+    explanation:"Le scale sequenziali variano progressivamente in luminosità o intensità e sono adatte a dati quantitativi ordinati."
+  },
+  {
+    category:"Visualizzazione dati",
+    q:"Una scala cromatica divergente è particolarmente adatta quando:",
+    options:["esiste un valore centrale significativo da cui i dati divergono","le categorie non hanno alcun ordine","si visualizzano soltanto fotografie","non sono presenti valori numerici"],
+    answer:0,
+    explanation:"Le scale divergenti evidenziano scostamenti in due direzioni rispetto a un punto di riferimento, come zero o una media."
+  },
+  {
+    category:"Visualizzazione dati",
+    q:"Per rendere una visualizzazione più accessibile a utenti con deficit della visione cromatica è utile:",
+    options:["non affidarsi esclusivamente al colore per distinguere le categorie","usare solo rosso e verde","eliminare tutte le etichette testuali","ridurre drasticamente il contrasto"],
+    answer:0,
+    explanation:"Colore, forma, pattern ed etichette possono essere combinati per evitare che il significato dipenda solo dalla percezione cromatica."
+  },
+  {
+    category:"Visualizzazione dati",
+    q:"Che cosa si intende per data-ink ratio nella terminologia di Tufte?",
+    options:["il rapporto tra elementi grafici che rappresentano dati e il totale dell'inchiostro grafico usato","la quantità di inchiostro consumata dalla stampante","il rapporto tra testo e immagini in una pagina","la percentuale di dati memorizzati in un file"],
+    answer:0,
+    explanation:"Il concetto suggerisce di massimizzare la parte della grafica che comunica dati, riducendo componenti non informative."
+  },
+  {
+    category:"Visualizzazione dati",
+    q:"Quale tra questi è un esempio di annotazione in un grafico?",
+    options:["un testo che evidenzia un picco o un evento specifico","la risoluzione dello schermo","il nome del file sorgente","il margine del browser"],
+    answer:0,
+    explanation:"Le annotazioni aggiungono spiegazioni contestuali a punti, eventi o pattern importanti della visualizzazione."
+  },
+  {
+    category:"Visualizzazione dati",
+    q:"Un outlier è:",
+    options:["un'osservazione che si discosta sensibilmente dalla distribuzione prevalente","il valore medio di una distribuzione","un'etichetta sull'asse X","una categoria sempre priva di dati"],
+    answer:0,
+    explanation:"Un outlier è un'osservazione anomala o molto distante rispetto al comportamento prevalente del dataset."
+  },
+
+  {
+    category:"Tipologie",
+    q:"Quale grafico è più adatto a mostrare l'andamento di una variabile nel tempo?",
+    options:["grafico a linee","grafico a torta","treemap","diagramma di Venn"],
+    answer:0,
+    explanation:"Il grafico a linee sfrutta l'ordine temporale e rende immediata la percezione di trend e variazioni."
+  },
+  {
+    category:"Tipologie",
+    q:"Quale grafico permette di osservare la relazione tra due variabili quantitative per ciascuna osservazione?",
+    options:["scatter plot","grafico a torta","istogramma","pittogramma"],
+    answer:0,
+    explanation:"Lo scatter plot posiziona ogni osservazione secondo una coordinata X e una Y, rendendo visibili associazioni e cluster."
+  },
+  {
+    category:"Tipologie",
+    q:"L'istogramma è usato principalmente per:",
+    options:["mostrare la distribuzione di una variabile quantitativa suddivisa in intervalli","rappresentare gerarchie aziendali","visualizzare flussi tra nodi","mostrare percorsi geografici"],
+    answer:0,
+    explanation:"Nell'istogramma i valori sono raggruppati in classi o bin, permettendo di vedere forma e frequenza della distribuzione."
+  },
+  {
+    category:"Tipologie",
+    q:"In una treemap, i valori quantitativi sono normalmente rappresentati attraverso:",
+    options:["l'area dei rettangoli","la lunghezza di una linea temporale","la posizione su una mappa geografica","la frequenza di animazione"],
+    answer:0,
+    explanation:"La treemap rappresenta dati gerarchici con rettangoli annidati la cui area è proporzionale a una quantità."
+  },
+  {
+    category:"Tipologie",
+    q:"Una mappa coropletica utilizza tipicamente:",
+    options:["variazioni di colore all'interno di aree geografiche","frecce animate senza coordinate","soltanto fotografie satellitari","cerchi concentrici privi di scala"],
+    answer:0,
+    explanation:"Le mappe coropletiche codificano un valore associato a regioni geografiche mediante scale cromatiche."
+  },
+  {
+    category:"Tipologie",
+    q:"Per una mappa coropletica che confronta regioni con popolazioni molto diverse, è spesso preferibile visualizzare:",
+    options:["un tasso o un valore normalizzato","il conteggio assoluto in ogni caso","la dimensione del file CSV","il numero di caratteri nel nome della regione"],
+    answer:0,
+    explanation:"Tassi e valori normalizzati evitano che aree più popolose risultino automaticamente più intense solo per la maggiore numerosità."
+  },
+  {
+    category:"Tipologie",
+    q:"Un diagramma di Sankey è particolarmente indicato per:",
+    options:["rappresentare flussi e quantità che passano tra stati o categorie","mostrare la distribuzione di una sola variabile","visualizzare esclusivamente coordinate geografiche","classificare font tipografici"],
+    answer:0,
+    explanation:"Nei Sankey lo spessore dei collegamenti rappresenta tipicamente l'entità dei flussi."
+  },
+  {
+    category:"Tipologie",
+    q:"Un box plot permette di osservare in modo sintetico:",
+    options:["mediana, quartili e possibili valori anomali","solo il massimo assoluto","esclusivamente dati geografici","relazioni causali certe"],
+    answer:0,
+    explanation:"Il box plot riassume una distribuzione tramite quartili, mediana, baffi e, secondo la convenzione usata, possibili outlier."
+  },
+  {
+    category:"Tipologie",
+    q:"Quale visualizzazione è particolarmente indicata per confrontare molte serie temporali di piccole dimensioni mantenendo una struttura ripetuta?",
+    options:["small multiples","grafico a torta 3D","word cloud","diagramma di Venn"],
+    answer:0,
+    explanation:"Gli small multiples ripetono la stessa struttura grafica su più pannelli, facilitando il confronto tra serie o categorie."
+  },
+  {
+    category:"Tipologie",
+    q:"La heatmap codifica tipicamente i valori mediante:",
+    options:["intensità o variazioni cromatiche in una matrice","altezza prospettica di oggetti 3D","lunghezza di paragrafi testuali","sequenze audio"],
+    answer:0,
+    explanation:"Le heatmap rappresentano valori su griglie o matrici tramite una scala cromatica."
+  },
+  {
+    category:"Tipologie",
+    q:"Un grafico a barre impilate al 100% è utile soprattutto per:",
+    options:["confrontare la composizione percentuale di più categorie","mostrare valori assoluti molto precisi di una singola serie","visualizzare una correlazione lineare","rappresentare una rete sociale"],
+    answer:0,
+    explanation:"Le barre impilate al 100% normalizzano ogni barra allo stesso totale e permettono di confrontarne la composizione relativa."
+  },
+  {
+    category:"Tipologie",
+    q:"Un network graph rappresenta principalmente:",
+    options:["nodi e relazioni tra nodi","la distribuzione per intervalli di una variabile","un'unica serie temporale","la composizione percentuale di un totale"],
+    answer:0,
+    explanation:"I grafi di rete sono progettati per evidenziare connessioni, strutture e topologie tra entità."
+  },
+  {
+    category:"Tipologie",
+    q:"Quale limite principale rende il grafico a torta poco efficace quando le categorie sono numerose?",
+    options:["diventa difficile confrontare con precisione molti angoli e aree","non può contenere colori","non consente alcuna etichetta","può rappresentare solo dati temporali"],
+    answer:0,
+    explanation:"Con molte fette, il confronto percettivo tra angoli e aree diventa difficile e la leggibilità peggiora."
+  },
+  {
+    category:"Tipologie",
+    q:"Un bubble chart estende tipicamente uno scatter plot aggiungendo:",
+    options:["una terza variabile codificata nella dimensione delle bolle","una legenda animata obbligatoria","un asse temporale nascosto","un campo testuale non quantitativo"],
+    answer:0,
+    explanation:"La posizione X-Y rappresenta due variabili e l'area o dimensione della bolla ne può codificare una terza."
+  },
+
+  {
+    category:"Dati dinamici",
+    q:"Che cosa distingue principalmente una visualizzazione dinamica da una statica?",
+    options:["può aggiornarsi o modificarsi in funzione del tempo, dei dati o dell'interazione","deve essere sempre tridimensionale","non può contenere testo","deve essere stampata su carta"],
+    answer:0,
+    explanation:"Una visualizzazione dinamica può cambiare in risposta a nuovi dati, tempo, filtri o azioni dell'utente."
+  },
+  {
+    category:"Dati dinamici",
+    q:"In una dashboard, un filtro interattivo serve a:",
+    options:["selezionare un sottoinsieme dei dati da visualizzare","aumentare automaticamente il numero di record","cancellare definitivamente il database","trasformare ogni grafico in un'immagine raster"],
+    answer:0,
+    explanation:"I filtri permettono all'utente di restringere il dominio osservato senza necessariamente modificare la sorgente dati."
+  },
+  {
+    category:"Dati dinamici",
+    q:"Il termine brushing in una visualizzazione interattiva indica spesso:",
+    options:["la selezione diretta di punti o intervalli mediante il puntatore","la modifica del colore di sfondo della pagina","la compressione dei dati","l'esportazione in formato PDF"],
+    answer:0,
+    explanation:"Il brushing consente di selezionare graficamente un insieme di elementi, spesso collegando la selezione ad altre viste."
+  },
+  {
+    category:"Dati dinamici",
+    q:"Il principio linking and brushing è utile perché:",
+    options:["sincronizza selezioni tra più visualizzazioni dello stesso dataset","rende obbligatoria l'animazione 3D","elimina la necessità di una sorgente dati","trasforma ogni valore numerico in testo"],
+    answer:0,
+    explanation:"Una selezione effettuata in una vista può essere evidenziata simultaneamente in altre viste correlate."
+  },
+  {
+    category:"Dati dinamici",
+    q:"Un tooltip interattivo è generalmente:",
+    options:["un piccolo pannello informativo mostrato al passaggio o alla selezione di un elemento","un sistema di backup del database","un tipo di asse logaritmico","un file contenente esclusivamente immagini"],
+    answer:0,
+    explanation:"Il tooltip permette di mostrare dettagli su richiesta senza sovraccaricare permanentemente il grafico."
+  },
+  {
+    category:"Dati dinamici",
+    q:"Il drill-down in una dashboard consente di:",
+    options:["passare da una vista aggregata a livelli di dettaglio più specifici","ridurre la risoluzione dello schermo","convertire una serie temporale in audio","eliminare automaticamente gli outlier"],
+    answer:0,
+    explanation:"Il drill-down consente di esplorare livelli gerarchici progressivamente più dettagliati."
+  },
+  {
+    category:"Dati dinamici",
+    q:"Per dati in tempo reale, la frequenza di aggiornamento dovrebbe essere scelta considerando soprattutto:",
+    options:["velocità con cui il fenomeno cambia e costi di aggiornamento","solo il colore del grafico","esclusivamente la dimensione del monitor","il numero di font installati"],
+    answer:0,
+    explanation:"Aggiornare troppo lentamente può rendere i dati obsoleti; aggiornare troppo spesso può consumare risorse senza apportare informazione utile."
+  },
+  {
+    category:"Dati dinamici",
+    q:"Quale problema può verificarsi se un grafico viene animato troppo rapidamente?",
+    options:["l'utente può non riuscire a percepire correttamente le variazioni","i dati diventano automaticamente errati","il database perde sempre i record","gli assi smettono di rappresentare numeri"],
+    answer:0,
+    explanation:"Animazioni troppo rapide possono ridurre la leggibilità e rendere difficile seguire le transizioni."
+  },
+  {
+    category:"Dati dinamici",
+    q:"Una transizione animata è più utile quando:",
+    options:["aiuta a mantenere la continuità percettiva tra due stati della visualizzazione","serve solo come decorazione priva di informazione","nasconde completamente i valori precedenti","rende impossibile confrontare gli stati"],
+    answer:0,
+    explanation:"Transizioni ben progettate aiutano l'utente a capire come gli elementi cambiano tra stati o filtri diversi."
+  },
+  {
+    category:"Dati dinamici",
+    q:"In una visualizzazione web, il formato SVG è particolarmente utile perché:",
+    options:["rappresenta grafica vettoriale e consente di manipolare singoli elementi nel DOM","è esclusivamente un formato audio","non supporta forme geometriche","può essere visualizzato solo dopo la stampa"],
+    answer:0,
+    explanation:"SVG è vettoriale, scalabile e integrato nel DOM, quindi adatto a grafici interattivi con elementi selezionabili."
+  },
+  {
+    category:"Dati dinamici",
+    q:"Quale tecnologia del browser è particolarmente adatta a disegnare molti elementi grafici su una superficie bitmap controllata da JavaScript?",
+    options:["Canvas HTML","RSS","SMTP","Markdown"],
+    answer:0,
+    explanation:"L'elemento Canvas fornisce una superficie raster programmabile, spesso efficace per scene con molti elementi dinamici."
+  },
+  {
+    category:"Dati dinamici",
+    q:"Quale vantaggio offre il caricamento dei dati tramite API in una dashboard?",
+    options:["permette di ottenere dati aggiornati da servizi o applicazioni esterne","garantisce che ogni dato sia sempre corretto","rende superflua la validazione dei dati","impedisce qualsiasi interazione dell'utente"],
+    answer:0,
+    explanation:"Le API consentono di integrare dati provenienti da sistemi esterni e di aggiornare la visualizzazione senza incorporare staticamente tutti i dati nella pagina."
+  }
+];
+
+// Distribuzione deterministica ma variata delle risposte corrette.
+// Ruotiamo le opzioni in base all'indice per evitare che la risposta corretta
+// occupi sempre la stessa posizione, conservando comunque la correttezza.
+function prepareQuestions(){
+  return questions.map((item, index) => {
+    const shift = [0,1,2,3,2,0,3,1][index % 8];
+    const rotated = [];
+    for(let i=0;i<4;i++){
+      rotated.push(item.options[(i + shift) % 4]);
+    }
+    const originalCorrectText = item.options[item.answer];
+    const newAnswer = rotated.indexOf(originalCorrectText);
+    return {...item, options:rotated, answer:newAnswer};
+  });
+}
+const quizData = prepareQuestions();
+
+function groupLabel(cat){
+  return {
+    "Storia":"1. Storia delle infografiche",
+    "Visualizzazione dati":"2. Principi di visualizzazione dei dati",
+    "Tipologie":"3. Tipologie di visualizzazione",
+    "Dati dinamici":"4. Dati dinamici e interattività"
+  }[cat] || cat;
+}
+
+function renderQuiz(){
+  const root = document.getElementById("quiz");
+  root.innerHTML = "";
+  let lastCat = null;
+
+  quizData.forEach((item, idx) => {
+    if(item.category !== lastCat){
+      const h = document.createElement("h2");
+      h.className = "section-title";
+      h.textContent = groupLabel(item.category);
+      root.appendChild(h);
+      lastCat = item.category;
+    }
+
+    const card = document.createElement("section");
+    card.className = "question";
+    card.id = `question-${idx}`;
+
+    const meta = document.createElement("div");
+    meta.className = "qmeta";
+    meta.innerHTML = `<span class="badge">${item.category}</span><span class="qnumber">Domanda ${idx+1} di 50</span>`;
+    card.appendChild(meta);
+
+    const qtext = document.createElement("div");
+    qtext.className = "qtext";
+    qtext.textContent = item.q;
+    card.appendChild(qtext);
+
+    const opts = document.createElement("div");
+    opts.className = "options";
+    item.options.forEach((opt, oi) => {
+      const lab = document.createElement("label");
+      lab.className = "option";
+      lab.dataset.option = oi;
+      lab.innerHTML = `<input type="radio" name="q${idx}" value="${oi}" onchange="updateAnswered()"> <span><strong>${String.fromCharCode(65+oi)}.</strong> ${opt}</span>`;
+      opts.appendChild(lab);
+    });
+    card.appendChild(opts);
+
+    const feedback = document.createElement("div");
+    feedback.className = "feedback";
+    feedback.id = `feedback-${idx}`;
+    card.appendChild(feedback);
+
+    const actions = document.createElement("div");
+    actions.className = "question-actions";
+    actions.innerHTML = `
+      <button class="validate" onclick="validateQuestion(${idx})">Valida risposta</button>
+      <button class="secondary" onclick="toggleExplanation(${idx})">Mostra spiegazione</button>
+    `;
+    card.appendChild(actions);
+
+    const expl = document.createElement("div");
+    expl.className = "explain";
+    expl.id = `explain-${idx}`;
+    expl.textContent = item.explanation;
+    card.appendChild(expl);
+
+    root.appendChild(card);
+  });
+}
+
+function getSelected(idx){
+  const checked = document.querySelector(`input[name="q${idx}"]:checked`);
+  return checked ? Number(checked.value) : null;
+}
+
+function clearOptionClasses(idx){
+  document.querySelectorAll(`#question-${idx} .option`).forEach(el => {
+    el.classList.remove("good","bad");
+  });
+}
+
+function validateQuestion(idx, silent=false){
+  const item = quizData[idx];
+  const selected = getSelected(idx);
+  const card = document.getElementById(`question-${idx}`);
+  const feedback = document.getElementById(`feedback-${idx}`);
+  clearOptionClasses(idx);
+  card.classList.remove("correct","incorrect");
+
+  if(selected === null){
+    feedback.className = "feedback show warn";
+    feedback.textContent = "Seleziona una risposta prima di validare.";
+    return false;
+  }
+
+  const labels = card.querySelectorAll(".option");
+  labels[item.answer].classList.add("good");
+
+  if(selected === item.answer){
+    card.classList.add("correct");
+    feedback.className = "feedback show ok";
+    feedback.textContent = "Risposta corretta.";
+    if(!silent) document.getElementById(`explain-${idx}`).classList.add("show");
+    updateCorrectCount();
+    return true;
+  } else {
+    card.classList.add("incorrect");
+    labels[selected].classList.add("bad");
+    feedback.className = "feedback show bad";
+    feedback.textContent = `Risposta non corretta. La soluzione è ${String.fromCharCode(65+item.answer)}: ${item.options[item.answer]}.`;
+    if(!silent) document.getElementById(`explain-${idx}`).classList.add("show");
+    updateCorrectCount();
+    return false;
+  }
+}
+
+function toggleExplanation(idx){
+  document.getElementById(`explain-${idx}`).classList.toggle("show");
+}
+
+function updateAnswered(){
+  let answered = 0;
+  quizData.forEach((_,i) => { if(getSelected(i) !== null) answered++; });
+  document.getElementById("answeredCount").textContent = answered;
+}
+
+function updateCorrectCount(){
+  let c = 0;
+  quizData.forEach((item,i) => {
+    const selected = getSelected(i);
+    const card = document.getElementById(`question-${i}`);
+    if(selected === item.answer && card.classList.contains("correct")) c++;
+  });
+  document.getElementById("correctCount").textContent = c;
+}
+
+function validateAll(){
+  let score = 0;
+  let unanswered = 0;
+  quizData.forEach((item,i) => {
+    const selected = getSelected(i);
+    if(selected === null){
+      unanswered++;
+      const feedback = document.getElementById(`feedback-${i}`);
+      feedback.className = "feedback show warn";
+      feedback.textContent = "Domanda non risposta.";
+      document.getElementById(`question-${i}`).classList.remove("correct","incorrect");
+      clearOptionClasses(i);
+    } else {
+      if(validateQuestion(i,true)) score++;
+      document.getElementById(`explain-${i}`).classList.add("show");
+    }
+  });
+
+  const pct = Math.round((score / quizData.length) * 100);
+  document.getElementById("score").textContent = score;
+  document.getElementById("percentage").textContent = pct;
+  document.getElementById("progressBar").style.width = pct + "%";
+
+  let assessment = "";
+  if(pct >= 90) assessment = "Eccellente padronanza dell'argomento.";
+  else if(pct >= 75) assessment = "Preparazione molto buona, con pochi aspetti da ripassare.";
+  else if(pct >= 60) assessment = "Preparazione sufficiente, ma conviene consolidare alcuni concetti.";
+  else assessment = "È consigliato un ripasso sistematico prima di ripetere il quiz.";
+
+  if(unanswered > 0) assessment += ` Domande non risposte: ${unanswered}.`;
+
+  document.getElementById("assessment").textContent = assessment;
+  document.getElementById("result").classList.add("show");
+  document.getElementById("result").scrollIntoView({behavior:"smooth",block:"center"});
+  updateAnswered();
+  updateCorrectCount();
+}
+
+function resetQuiz(){
+  document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+  document.querySelectorAll(".question").forEach(el => el.classList.remove("correct","incorrect"));
+  document.querySelectorAll(".option").forEach(el => el.classList.remove("good","bad"));
+  document.querySelectorAll(".feedback").forEach(el => {el.className="feedback";el.textContent="";});
+  document.querySelectorAll(".explain").forEach(el => el.classList.remove("show"));
+  document.getElementById("answeredCount").textContent = "0";
+  document.getElementById("correctCount").textContent = "0";
+  document.getElementById("result").classList.remove("show");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+renderQuiz();
+</script>
+</body>
+</html>

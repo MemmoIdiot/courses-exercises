@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10 esercizi JavaScript con tendine</title>
+<style>
+:root {
+  --bg: #f4f7f9;
+  --panel: #dff3f8;
+  --ink: #17232b;
+  --accent: #0d4f73;
+  --ok: #18794e;
+  --bad: #b42318;
+  --border: #bfd6df;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.45;
+}
+header {
+  background: #073b5a;
+  color: white;
+  padding: 24px 5vw;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+header h1 { margin: 0 0 6px; font-size: 1.45rem; }
+header p { margin: 0; opacity: .9; }
+main { width: min(1180px, 94vw); margin: 28px auto 120px; }
+.exercise {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  margin: 0 0 26px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.06);
+}
+.exercise h2 {
+  margin-top: 0;
+  color: #123f56;
+  font-size: 1.2rem;
+}
+.problem { margin-bottom: 22px; }
+.problem code {
+  background: rgba(255,255,255,.6);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+.solution-title {
+  font-size: 1.05rem;
+  margin: 14px 0 8px;
+  color: #234c60;
+}
+.code {
+  white-space: pre-wrap;
+  overflow-x: auto;
+  background: rgba(255,255,255,.42);
+  border: 1px solid rgba(13,79,115,.15);
+  padding: 18px;
+  border-radius: 8px;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 14px;
+  line-height: 1.65;
+}
+select.blank {
+  font: inherit;
+  min-width: 115px;
+  max-width: 340px;
+  padding: 3px 26px 3px 6px;
+  border: 1px solid #8ea8b5;
+  border-radius: 5px;
+  background: white;
+}
+select.blank.correct {
+  border: 2px solid var(--ok);
+  background: #ecfdf3;
+}
+select.blank.wrong {
+  border: 2px solid var(--bad);
+  background: #fff1f0;
+}
+.feedback {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  margin-left: 4px;
+}
+.feedback.ok { color: var(--ok); }
+.feedback.bad { color: var(--bad); }
+.exercise-result {
+  margin-top: 10px;
+  font-weight: 700;
+  color: #365667;
+}
+.controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255,255,255,.97);
+  border-top: 1px solid #cbd8df;
+  padding: 14px 5vw;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  box-shadow: 0 -2px 10px rgba(0,0,0,.08);
+  z-index: 20;
+}
+button {
+  border: 0;
+  border-radius: 7px;
+  padding: 11px 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+#check { background: #0d4f73; color: white; }
+#reset { background: #e7edf0; color: #17394a; }
+#score { margin-left: auto; font-weight: 800; }
+.note {
+  width: min(1180px, 94vw);
+  margin: 18px auto 0;
+  background: #fff8df;
+  border: 1px solid #ead79d;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+@media (max-width: 720px) {
+  .exercise { padding: 16px; }
+  .code { font-size: 12px; }
+  .controls { flex-wrap: wrap; }
+  #score { width: 100%; margin-left: 0; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>10 esercizi JavaScript “a tendina”</h1>
+  <p>Livello medio-avanzato · 69 scelte complessive · matrici, stringhe, array, random, oggetti e algoritmi</p>
+</header>
+
+<div class="note">
+  Seleziona un'opzione in ogni tendina e premi <b>Correggi</b>. Le risposte errate vengono evidenziate,
+  ma la soluzione corretta non viene mostrata automaticamente.
+</div>
+
+<main>
+
+<section class="exercise" data-ex="1">
+  <h2>1. Drone di soccorso — analisi di una matrice termica</h2>
+  <div class="problem">
+Una squadra di soccorso usa un drone che restituisce una matrice 4×4 di valori interi, positivi o negativi.
+Scrivere una funzione <b>analizzaColonne(m)</b> che:
+<ul>
+<li>calcoli, per ogni colonna, la somma dei valori assoluti;</li>
+<li>individui l'indice della colonna con somma maggiore;</li>
+<li>restituisca un oggetto con il vettore delle somme e l'indice della colonna individuata.</li>
+</ul>
+</div>
+  <div class="solution-title">SOLUZIONE DA COMPLETARE</div>
+  <pre class="code">const A = [
+    [ 3, -2,  5,  1],
+    [-4,  7, -1,  2],
+    [ 6, -3,  2, -5],
+    [ 1,  4, -6,  3]
+];
+
+function analizzaColonne(m) {
+    let somme = new Array(<select class="blank" id="e1_b1" data-correct="m[0].length"><option value="">— scegli —</option><option value="m.length - 1">m.length - 1</option><option value="m[0].length">m[0].length</option><option value="m[0]">m[0]</option><option value="m.length">m.length</option></select><span class="feedback" id="fb_e1_b1"></span>).fill(0);
+
+    for (let i = 0; <select class="blank" id="e1_b2" data-correct="i &lt; m.length"><option value="">— scegli —</option><option value="i &lt;= m.length - 1">i &lt;= m.length - 1</option><option value="i &lt; m[0].length - 1">i &lt; m[0].length - 1</option><option value="i &lt;= m.length">i &lt;= m.length</option><option value="i &lt; m.length">i &lt; m.length</option></select><span class="feedback" id="fb_e1_b2"></span>; i++) {
+        for (let j = 0; <select class="blank" id="e1_b3" data-correct="j &lt; m[i].length"><option value="">— scegli —</option><option value="j &lt; m.length - 1">j &lt; m.length - 1</option><option value="j &lt;= m[0].length">j &lt;= m[0].length</option><option value="j &lt; m[i].length">j &lt; m[i].length</option><option value="j &lt;= m[i].length">j &lt;= m[i].length</option></select><span class="feedback" id="fb_e1_b3"></span>; j++) {
+            somme[j] += <select class="blank" id="e1_b4" data-correct="Math.abs(m[i][j])"><option value="">— scegli —</option><option value="m[i][j]">m[i][j]</option><option value="Math.abs(m[i][j])">Math.abs(m[i][j])</option><option value="Math.abs(m[j][i])">Math.abs(m[j][i])</option><option value="Math.floor(m[i][j])">Math.floor(m[i][j])</option></select><span class="feedback" id="fb_e1_b4"></span>;
+        }
+    }
+
+    let max = somme[0];
+    let indice = 0;
+
+    for (let j = 1; j &lt; somme.length; j++) {
+        if (<select class="blank" id="e1_b5" data-correct="somme[j] &gt; max"><option value="">— scegli —</option><option value="somme[j] &gt;= somme[0]">somme[j] &gt;= somme[0]</option><option value="somme[j] &gt; max">somme[j] &gt; max</option><option value="max &gt; somme[j]">max &gt; somme[j]</option><option value="somme[j] &lt; max">somme[j] &lt; max</option></select><span class="feedback" id="fb_e1_b5"></span>) {
+            max = somme[j];
+            <select class="blank" id="e1_b6" data-correct="indice = j"><option value="">— scegli —</option><option value="indice = somme[j]">indice = somme[j]</option><option value="indice = j">indice = j</option><option value="j = indice">j = indice</option><option value="indice++">indice++</option></select><span class="feedback" id="fb_e1_b6"></span>;
+        }
+    }
+
+    return { somme: somme, colonna: indice };
+}</pre>
+  <div class="exercise-result" id="result-1">0 / 6 selezioni corrette</div>
+</section>
+
+<section class="exercise" data-ex="2">
+  <h2>2. Segnale alieno — compressione a blocchi</h2>
+  <div class="problem">
+Un'antenna riceve una stringa composta da lettere maiuscole consecutive, ad esempio <code>AAABCCDDDD</code>.
+La funzione <b>comprimi(s)</b> deve trasformarla in <code>A3B1C2D4</code>, indicando per ogni blocco
+la lettera e il numero di ripetizioni consecutive. Si assuma che la stringa non sia vuota.
+</div>
+  <div class="solution-title">SOLUZIONE DA COMPLETARE</div>
+  <pre class="code">function comprimi(s) {
+    let risultato = <select class="blank" id="e2_b1" data-correct="&quot;&quot;"><option value="">— scegli —</option><option value="0">0</option><option value="&quot;&quot;">&quot;&quot;</option><option value="&quot; &quot;">&quot; &quot;</option><option value="[]">[]</option></select><span class="feedback" id="fb_e2_b1"></span>;
+    let conta = <select class="blank" id="e2_b2" data-correct="1"><option value="">— scegli —</option><option value="1">1</option><option value="-1">-1</option><option value="0">0</option><option value="s.length">s.length</option></select><span class="feedback" id="fb_e2_b2"></span>;
+
+    for (let i = <select class="blank" id="e2_b3" data-correct="1"><option value="">— scegli —</option><option value="0">0</option><option value="s.length - 1">s.length - 1</option><option value="1">1</option><option value="2">2</option></select><span class="feedback" id="fb_e2_b3"></span>; <select class="blank" id="e2_b4" data-correct="i &lt;= s.length"><option value="">— scegli —</option><option value="i &lt; s.length - 1">i &lt; s.length - 1</option><option value="i &lt;= s.length - 1">i &lt;= s.length - 1</option><option value="i &lt; s.length">i &lt; s.length</option><option value="i &lt;= s.length">i &lt;= s.length</option></select><span class="feedback" id="fb_e2_b4"></span>; i++) {
+        if (<select class="blank" id="e2_b5" data-correct="i &lt; s.length &amp;&amp; s[i] === s[i - 1]"><option value="">— scegli —</option><option value="s[i] !== s[i - 1]">s[i] !== s[i - 1]</option><option value="i &lt;= s.length &amp;&amp; s[i] === s[i + 1]">i &lt;= s.length &amp;&amp; s[i] === s[i + 1]</option><option value="i &gt; s.length &amp;&amp; s[i] === s[i - 1]">i &gt; s.length &amp;&amp; s[i] === s[i - 1]</option><option value="i &lt; s.length &amp;&amp; s[i] === s[i - 1]">i &lt; s.length &amp;&amp; s[i] === s[i - 1]</option></select><span class="feedback" id="fb_e2_b5"></span>) {
+            <select class="blank" id="e2_b6" data-correct="conta++"><option value="">— scegli —</option><option value="i++">i++</option><option value="risultato++">risultato++</option><option value="conta++">conta++</option><option value="conta = 0">conta = 0</option></select><span class="feedback" id="fb_e2_b6"></span>;
+        } else {
+            risultato += <select class="blank" id="e2_b7" data-correct="s[i - 1] + conta"><option value="">— scegli —</option><option value="s[i - 1] + i">s[i - 1] + i</option><option value="conta + s[i]">conta + s[i]</option><option value="s[i] + conta">s[i] + conta</option><option value="s[i - 1] + conta">s[i - 1] + conta</option></select><span class="feedback" id="fb_e2_b7"></span>;
+            <select class="blank" id="e2_b8" data-correct="conta = 1"><option value="">— scegli —</option><option value="conta = 1">conta = 1</option><option value="conta = i">conta = i</option><option value="conta++">conta++</option><option value="conta = 0">conta = 0</option></select><span class="feedback" id="fb_e2_b8"></span>;
+        }
+    }
+
+    return risultato;
+}
+
+document.write(comprimi(&quot;AAABCCDDDD&quot;));</pre>
+  <div class="exercise-result" id="result-2">0 / 8 selezioni corrette</div>
+</section>
+
+<section class="exercise" data-ex="3">
+  <h2>3. Stazione meteorologica — escursione e giorni anomali</h2>
+  <div class="problem">
+Una stazione registra le temperature di più giorni in un vettore. La funzione <b>analizzaTemperature(v)</b>
+deve calcolare media, minimo, massimo, escursione termica e quanti valori sono strettamente superiori alla media.
+</div>
+  <div class="solution-title">SOLUZIONE DA COMPLETARE</div>
+  <pre class="code">function analizzaTemperature(v) {
+    let somma = 0;
+    let min = <select class="blank" id="e3_b1" data-correct="v[0]"><option value="">— scegli —</option><option value="0">0</option><option value="v[0]">v[0]</option><option value="Infinity">Infinity</option><option value="v.length">v.length</option></select><span class="feedback" id="fb_e3_b1"></span>;
+    let max = v[0];
+
+    for (let i = 0; i &lt; v.length; i++) {
+        somma += <select class="blank" id="e3_b2" data-correct="v[i]"><option value="">— scegli —</option><option value="somma">somma</option><option value="i">i</option><option value="v.length">v.length</option><option value="v[i]">v[i]</option></select><span class="feedback" id="fb_e3_b2"></span>;
+
+        if (<select class="blank" id="e3_b3" data-correct="v[i] &lt; min"><option value="">— scegli —</option><option value="v[i] &lt; min">v[i] &lt; min</option><option value="v[i] &lt;= max">v[i] &lt;= max</option><option value="min &lt; max">min &lt; max</option><option value="v[i] &gt; min">v[i] &gt; min</option></select><span class="feedback" id="fb_e3_b3"></span>) {
+            min = v[i];
+        }
+
+        if (<select class="blank" id="e3_b4" data-correct="v[i] &gt; max"><option value="">— scegli —</option><option value="max &gt; min">max &gt; min</option><option value="v[i] &gt;= min">v[i] &gt;= min</option><option value="v[i] &lt; max">v[i] &lt; max</option><option value="v[i] &gt; max">v[i] &gt; max</option></select><span class="feedback" id="fb_e3_b4"></span>) {
+            max = v[i];
+        }
+    }
+
+    let media = <select class="blank" id="e3_b5" data-correct="somma / v.length"><option value="">— scegli —</option><option value="v.length / somma">v.length / somma</option><option value="somma / v.length">somma / v.length</option><option value="somma / (v.length - 1)">somma / (v.length - 1)</option><option value="somma * v.length">somma * v.length</option></select><span class="feedback" id="fb_e3_b5"></span>;
+    let sopraMedia = 0;
+
+    for (let i = 0; i &lt; v.length; i++) {
+        if (<select class="blank" id="e3_b6" data-correct="v[i] &gt; media"><option value="">— scegli —</option><option value="v[i] &gt;= max">v[i] &gt;= max</option><option value="v[i] &lt; media">v[i] &lt; media</option><option value="v[i] &gt; media">v[i] &gt; media</option><option value="media &gt; max">media &gt; max</option></select><span class="feedback" id="fb_e3_b6"></span>) {
+            sopraMedia++;
+        }
+    }
+
+    return {
+        media: media,
+        escursione: <select class="blank" id="e3_b7" data-correct="max - min"><option value="">— scegli —</option><option value="min - max">min - max</option><option value="max - min">max - min</option><option value="Math.abs(max + min)">Math.abs(max + min)</option><option value="max + min">max + min</option></select><span class="feedback" id="fb_e3_b7"></span>,
+        sopraMedia: sopraMedia
+    };
+}</pre>
+  <div class="exercise-result" id="result-3">0 / 7 selezioni corrette</div>
+</section>
+
+<section class="exercise" data-ex="4">
+  <h2>4. Rover su Marte — avanzamento casuale con imprevisti</h2>
+  <div class="problem">
+Un rover deve raggiungere almeno 25 km. A ogni ciclo estrae casualmente un valore da 1 a 6.
+Se esce 1, scivola indietro di 2 km senza mai scendere sotto 0; altrimenti avanza del valore estratto.
+Il programma deve contare anche quante volte viene estratto il 6 (“turbo”).
+</div>
+  <div class="solution-title">SOLUZIONE DA COMPLETARE</div>
+  <pre class="code">function missioneMarte() {
+    let distanza = 0;
+    let mosse = 0;
+    let turbo = 0;
+
+    while (<select class="blank" id="e4_b1" data-correct="distanza &lt; 25"><option value="">— scegli —</option><option value="distanza &lt;= 0">distanza &lt;= 0</option><option value="distanza &lt;= 6">distanza &lt;= 6</option><option value="mosse &lt; 25">mosse &lt; 25</option><option value="distanza &lt; 25">distanza &lt; 25</option></select><span class="feedback" id="fb_e4_b1"></span>) {
+        let passo = Math.floor(<select class="blank" id="e4_b2" data-correct="Math.random() * 6"><option value="">— scegli —</option><option value="Math.random() * 6">Math.random() * 6</option><option value="Math.floor(Math.random()) * 6">Math.floor(Math.random()) * 6</option><option value="Math.random() * 5">Math.random() * 5</option><option value="Math.random() + 6">Math.random() + 6</option></select><span class="feedback" id="fb_e4_b2"></span>) + <select class="blank" id="e4_b3" data-correct="1"><option value="">— scegli —</option><option value="6">6</option><option value="-1">-1</option><option value="0">0</option><option value="1">1</option></select><span class="feedback" id="fb_e4_b3"></span>;
+        mosse++;
+
+        if (<select class="blank" id="e4_b4" data-correct="passo === 1"><option value="">— scegli —</option><option value="passo === 1">passo === 1</option><option value="passo = 1">passo = 1</option><option value="passo === 6">passo === 6</option><option value="passo &lt; 0">passo &lt; 0</option></select><span class="feedback" id="fb_e4_b4"></span>) {
+            distanza = <select class="blank" id="e4_b5" data-correct="Math.max(0, distanza - 2)"><option value="">— scegli —</option><option value="Math.min(0, distanza - 2)">Math.min(0, distanza - 2)</option><option value="Math.abs(distanza - 2)">Math.abs(distanza - 2)</option><option value="distanza - 2">distanza - 2</option><option value="Math.max(0, distanza - 2)">Math.max(0, distanza - 2)</option></select><span class="feedback" id="fb_e4_b5"></span>;
+        } else {
+            <select class="blank" id="e4_b6" data-correct="distanza += passo"><option value="">— scegli —</option><option value="distanza++">distanza++</option><option value="passo += distanza">passo += distanza</option><option value="distanza += passo">distanza += passo</option><option value="distanza = passo">distanza = passo</option></select><span class="feedback" id="fb_e4_b6"></span>;
+        }
+
+        if (<select class="blank" id="e4_b7" data-correct="passo === 6"><option value="">— scegli —</option><option value="passo &gt;= 5">passo &gt;= 5</option><option value="turbo === 6">turbo === 6</option><option value="passo === 1">passo === 1</option><option value="passo === 6">passo === 6</option></select><span class="feedback" id="fb_e4_b7"></span>) {
+            turbo++;
+        }
+    }
+
+    return { distanza: distanza, mosse: mosse, turbo: turbo };
+}</pre>
+  <div class="exercise-result" id="result-4">0 / 7 selezioni corrette</div>
+</section>
+
+<section class="exercise" data-ex="5">
+  <h2>5. Flotta mercantile — oggetti, metodi e stato</h2>
+  <div class="problem">
+Una flotta è rappresentata da oggetti con nome, carico e capacità massima. Ogni nave possiede un metodo
+<b>occupazione()</b> che restituisce il rapporto carico/capacità. La funzione deve individuare la nave
+con il rapporto di occupazione più alto e contare quante navi sono sovraccariche.
+</div>
+  <div class="solution-title">SOLUZIONE DA COMPLETARE</div>
+  <pre class="code">let flotta = [
+    {
+        nome: &quot;Orione&quot;,
+        carico: 72,
+        capacita: 90,
+        occupazione: function() {
+            return <select class="blank" id="e5_b1" data-correct="this.carico / this.capacita"><option value="">— scegli —</option><option value="this.carico + this.capacita">this.carico + this.capacita</option><option value="this.capacita / this.carico">this.capacita / this.carico</option><option value="carico / capacita">carico / capacita</option><option value="this.carico / this.capacita">this.carico / this.capacita</option></select><span class="feedback" id="fb_e5_b1"></span>;
+        }
+    },
+    {
+        nome: &quot;Vega&quot;,
+        carico: 105,
+        capacita: 100,
+        occupazione: function() {
+            return this.carico / this.capacita;
+        }
+    },
+    {
+        nome: &quot;Altair&quot;,
+        carico: 60,
+        capacita: 80,
+        occupazione: function() {
+            return this.carico / this.capacita;
+        }
+    }
+];
+
+function analizzaFlotta(v) {
+    let migliore = <select class="blank" id="e5_b2" data-correct="v[0]"><option value="">— scegli —</option><option value="v">v</option><option value="v[0]">v[0]</option><option value="0">0</option><option value="null">null</option></select><span class="feedback" id="fb_e5_b2"></span>;
+    let sovraccariche = 0;
+
+    for (let i = 0; <select class="blank" id="e5_b3" data-correct="i &lt; v.length"><option value="">— scegli —</option><option value="i &lt; v.length - 1">i &lt; v.length - 1</option><option value="i &lt;= v.length">i &lt;= v.length</option><option value="i &lt;= v.length - 1">i &lt;= v.length - 1</option><option value="i &lt; v.length">i &lt; v.length</option></select><span class="feedback" id="fb_e5_b3"></span>; i++) {
+        if (<select class="blank" id="e5_b4" data-correct="v[i].carico &gt; v[i].capacita"><option value="">— scegli —</option><option value="v[i].carico &lt; v[i].capacita">v[i].carico &lt; v[i].capacita</option><option value="v[i].capacita === 0">v[i].capacita === 0</option><option value="v[i].occupazione &lt; 1">v[i].occupazione &lt; 1</option><option value="v[i].carico &gt; v[i].capacita">v[i].carico &gt; v[i].capacita</option></select><span class="feedback" id="fb_e5_b4"></span>) {
+            sovraccariche++;
+        }
+
+        if (<select class="blank" id="e5_b5" data-correct="v[i].occupazione() &gt; migliore.occupazione()"><option value="">— scegli —</option><option value="v[i].occupazione &gt; migliore.occupazione">v[i].occupazione &gt; migliore.occupazione</option><option value="v[i].occupazione() &lt; migliore.occupazione()">v[i].occupazione() &lt; migliore.occupazione()</option><option value="v[i].occupazione() &gt; migliore.occupazione()">v[i].occupazione() &gt; migliore.occupazione()</option><option value="v[i].carico &gt; migliore">v[i].carico &gt; migliore</option></select><span class="feedback" id="fb_e5_b5"></span>) {
+            <select class="blank" id="e5_b6" data-correct="migliore = v[i]"><option value="">— scegli —</option><option value="v[i] = migliore">v[i] = migliore</option><option value="migliore = i">migliore = i</option><option value="migliore++">migliore++</option><option value="migliore = v[i]">migliore = v[i]</option></select><span class="feedback" id="fb_e5_b6"></span>;
+        }
+    }
+
+    return {
+        piuPiena: <select class="blank" id="e5_b7" data-correct="migliore.nome"><option value="">— scegli —</option><option value="migliore.nome">migliore.nome</option><option value="v.nome">v.nome</option><option value="migliore">migliore</option><option value="migliore[0]">migliore[0]</option></select><span class="feedback" id="fb_e5_b7"></span>,
+        sovraccariche: sovraccariche
+    };
+}</pre>
+  <div class="exercise-result" id="result-5">0 / 7 selezioni corrette</div>
+</section>
+
+<section class="exercise" data-ex="6">
+  <h2>6. Labirinto di vetro — celle di bordo e trappole interne</h2>
+  <div class="problem">
+Una mappa è una matrice rettangolare: <code>0</code> indica una cella libera, <code>1</code> un muro,
+<code>2</code> una trappola. La funzione deve contare le celle libere poste sul bordo (possibili uscite)
+e le trappole che si trovano esclusivamente all'interno.
+</div>
+  <div class="solution-title">SOLUZIONE DA COMPLETARE</div>
+  <pre class="code">function analizzaMappa(m) {
+    let uscite = 0;
+    let trappoleInterne = 0;
+
+    for (let i = 0; i &lt; m.length; i++) {
+        for (let j = 0; j &lt; m[i].length; j++) {
+
+            let bordo =
+                i === 0 ||
+                i === <select class="blank" id="e6_b1" data-correct="m.length - 1"><option value="">— scegli —</option><option value="m.length - 1">m.length - 1</option><option value="m[i].length">m[i].length</option><option value="i - 1">i - 1</option><option value="m.length">m.length</option></select><span class="feedback" id="fb_e6_b1"></span> ||
+                j === 0 ||
+                j === <select class="blank" id="e6_b2" data-correct="m[i].length - 1"><option value="">— scegli —</option><option value="m[i].length">m[i].length</option><option value="m.length - 1">m.length - 1</option><option value="m[i].length - 1">m[i].length - 1</option><option value="j - 1">j - 1</option></select><span class="feedback" id="fb_e6_b2"></span>;
+
+            if (<select class="blank" id="e6_b3" data-correct="bordo"><option value="">— scegli —</option><option value="!bordo">!bordo</option><option value="m[i][j]">m[i][j]</option><option value="bordo">bordo</option><option value="uscite">uscite</option></select><span class="feedback" id="fb_e6_b3"></span> &amp;&amp; m[i][j] === 0) {
+                uscite++;
+            }
+
+            if (<select class="blank" id="e6_b4" data-correct="!bordo"><option value="">— scegli —</option><option value="!bordo">!bordo</option><option value="bordo">bordo</option><option value="m[i][j] !== 0">m[i][j] !== 0</option><option value="i === j">i === j</option></select><span class="feedback" id="fb_e6_b4"></span> &amp;&amp; <select class="blank" id="e6_b5" data-correct="m[i][j] === 2"><option value="">— scegli —</option><option value="m[j][i] === 2">m[j][i] === 2</option><option value="m[i][j] === 0">m[i][j] === 0</option><option value="m[i][j] === 2">m[i][j] === 2</option><option value="m[i][j] = 2">m[i][j] = 2</option></select><span class="feedback" id="fb_e6_b5"></span>) {
+                trappoleInterne++;
+            }
+        }
+    }
+
+    return <select class="blank" id="e6_b6" data-correct="[uscite, trappoleInterne]"><option value="">— scegli —</option><option value="m">m</option><option value="[uscite, trappoleInterne]">[uscite, trappoleInterne]</option><option value="uscite + trappoleInterne">uscite + trappoleInterne</option><option value="{uscite + trappoleInterne}">{uscite + trappoleInterne}</option></select><span class="feedback" id="fb_e6_b6"></span>;
+}</pre>
+  <div class="exercise-result" id="result-6">0 / 6 selezioni corrette</div>
+</section>
+
+<section class="exercise" data-ex="7">
+  <h2>7. Laboratorio genetico — percentuale GC e sequenza ripetuta più lunga</h2>
+  <div class="problem">
+Una stringa DNA contiene solo A, C, G e T. La funzione <b>analizzaDNA(seq)</b> deve calcolare:
+la percentuale di basi G/C e la lunghezza massima di una sequenza di basi uguali consecutive.
+Si assuma che la stringa contenga almeno un carattere.
+</div>
+  <div class="solution-title">SOLUZIONE DA COMPLETARE</div>
+  <pre class="code">function analizzaDNA(seq) {
+    seq = <select class="blank" id="e7_b1" data-correct="seq.toUpperCase()"><option value="">— scegli —</option><option value="String(seq.length)">String(seq.length)</option><option value="seq.toUpperCase()">seq.toUpperCase()</option><option value="seq.toLowerCase()">seq.toLowerCase()</option><option value="seq.reverse()">seq.reverse()</option></select><span class="feedback" id="fb_e7_b1"></span>;
+
+    let gc = 0;
+    let corrente = 1;
+    let massimo = 1;
+
+    for (let i = 0; i &lt; seq.length; i++) {
+
+        if (<select class="blank" id="e7_b2" data-correct="seq[i] === &quot;G&quot; || seq[i] === &quot;C&quot;"><option value="">— scegli —</option><option value="seq[i] !== &quot;G&quot; || seq[i] !== &quot;C&quot;">seq[i] !== &quot;G&quot; || seq[i] !== &quot;C&quot;</option><option value="seq[i] === &quot;A&quot; || seq[i] === &quot;T&quot;">seq[i] === &quot;A&quot; || seq[i] === &quot;T&quot;</option><option value="seq[i] === &quot;G&quot; || seq[i] === &quot;C&quot;">seq[i] === &quot;G&quot; || seq[i] === &quot;C&quot;</option><option value="seq[i] === &quot;G&quot; &amp;&amp; seq[i] === &quot;C&quot;">seq[i] === &quot;G&quot; &amp;&amp; seq[i] === &quot;C&quot;</option></select><span class="feedback" id="fb_e7_b2"></span>) {
+            gc++;
+        }
+
+        if (i &gt; 0) {
+            if (<select class="blank" id="e7_b3" data-correct="seq[i] === seq[i - 1]"><option value="">— scegli —</option><option value="i === seq[i]">i === seq[i]</option><option value="seq[i] !== seq[i - 1]">seq[i] !== seq[i - 1]</option><option value="seq[i] === seq[i + 1]">seq[i] === seq[i + 1]</option><option value="seq[i] === seq[i - 1]">seq[i] === seq[i - 1]</option></select><span class="feedback" id="fb_e7_b3"></span>) {
+                <select class="blank" id="e7_b4" data-correct="corrente++"><option value="">— scegli —</option><option value="corrente++">corrente++</option><option value="massimo++">massimo++</option><option value="gc++">gc++</option><option value="corrente = 0">corrente = 0</option></select><span class="feedback" id="fb_e7_b4"></span>;
+            } else {
+                corrente = <select class="blank" id="e7_b5" data-correct="1"><option value="">— scegli —</option><option value="i">i</option><option value="0">0</option><option value="massimo">massimo</option><option value="1">1</option></select><span class="feedback" id="fb_e7_b5"></span>;
+            }
+
+            if (corrente &gt; massimo) {
+                <select class="blank" id="e7_b6" data-correct="massimo = corrente"><option value="">— scegli —</option><option value="massimo = i">massimo = i</option><option value="massimo++">massimo++</option><option value="massimo = corrente">massimo = corrente</option><option value="corrente = massimo">corrente = massimo</option></select><span class="feedback" id="fb_e7_b6"></span>;
+            }
+        }
+    }
+
+    return {
+        percentualeGC: <select class="blank" id="e7_b7" data-correct="100 * gc / seq.length"><option value="">— scegli —</option><option value="100 * gc / seq.length">100 * gc / seq.length</option><option value="gc / seq.length">gc / seq.length</option><option value="gc / 100 * seq.length">gc / 100 * seq.length</option><option value="100 * seq.length / gc">100 * seq.length / gc</option></select><span class="feedback" id="fb_e7_b7"></span>,
+        maxRipetizione: massimo
+    };
+}</pre>
+  <div class="exercise-result" id="result-7">0 / 7 selezioni corrette</div>
+</section>
+
+<section class="exercise" data-ex="8">
+  <h2>8. Cinema interstellare — scegliere la fila migliore</h2>
+  <div class="problem">
+Una sala è rappresentata da una matrice in cui <code>0</code> significa posto libero e <code>1</code> posto occupato.
+La funzione deve trovare la fila con il maggior numero di posti liberi. In caso di parità deve mantenere
+la prima fila incontrata. Il numero di fila restituito deve partire da 1.
+</div>
+  <div class="solution-title">SOLUZIONE DA COMPLETARE</div>
+  <pre class="code">function migliorFila(sala) {
+    let massimoLiberi = <select class="blank" id="e8_b1" data-correct="-1"><option value="">— scegli —</option><option value="Infinity">Infinity</option><option value="0">0</option><option value="-1">-1</option><option value="sala.length">sala.length</option></select><span class="feedback" id="fb_e8_b1"></span>;
+    let fila = -1;
+
+    for (let i = 0; <select class="blank" id="e8_b2" data-correct="i &lt; sala.length"><option value="">— scegli —</option><option value="i &lt; sala.length">i &lt; sala.length</option><option value="i &lt; sala[0].length">i &lt; sala[0].length</option><option value="i &lt;= sala.length - 1">i &lt;= sala.length - 1</option><option value="i &lt;= sala.length">i &lt;= sala.length</option></select><span class="feedback" id="fb_e8_b2"></span>; i++) {
+        let liberi = 0;
+
+        for (let j = 0; <select class="blank" id="e8_b3" data-correct="j &lt; sala[i].length"><option value="">— scegli —</option><option value="j &lt; sala[i].length - 1">j &lt; sala[i].length - 1</option><option value="j &lt; sala.length">j &lt; sala.length</option><option value="j &lt; sala[i].length">j &lt; sala[i].length</option><option value="j &lt;= sala[i].length">j &lt;= sala[i].length</option></select><span class="feedback" id="fb_e8_b3"></span>; j++) {
+            if (<select class="blank" id="e8_b4" data-correct="sala[i][j] === 0"><option value="">— scegli —</option><option value="sala[i][j] === 1">sala[i][j] === 1</option><option value="sala[j][i] === 0">sala[j][i] === 0</option><option value="sala[i][j] === 0">sala[i][j] === 0</option><option value="sala[i][j] = 0">sala[i][j] = 0</option></select><span class="feedback" id="fb_e8_b4"></span>) {
+                liberi++;
+            }
+        }
+
+        if (<select class="blank" id="e8_b5" data-correct="liberi &gt; massimoLiberi"><option value="">— scegli —</option><option value="liberi &gt;= massimoLiberi">liberi &gt;= massimoLiberi</option><option value="massimoLiberi &gt; sala.length">massimoLiberi &gt; sala.length</option><option value="liberi &lt; massimoLiberi">liberi &lt; massimoLiberi</option><option value="liberi &gt; massimoLiberi">liberi &gt; massimoLiberi</option></select><span class="feedback" id="fb_e8_b5"></span>) {
+            massimoLiberi = liberi;
+            fila = <select class="blank" id="e8_b6" data-correct="i + 1"><option value="">— scegli —</option><option value="i">i</option><option value="j + 1">j + 1</option><option value="sala[i]">sala[i]</option><option value="i + 1">i + 1</option></select><span class="feedback" id="fb_e8_b6"></span>;
+        }
+    }
+
+    return {
+        fila: fila,
+        postiLiberi: massimoLiberi
+    };
+}</pre>
+  <div class="exercise-result" id="result-8">0 / 6 selezioni corrette</div>
+</section>
+
+<section class="exercise" data-ex="9">
+  <h2>9. Torneo dei maghi — seconda potenza massima distinta</h2>
+  <div class="problem">
+Un vettore contiene i punteggi di potenza di vari maghi. Senza ordinare il vettore,
+scrivere una funzione che restituisca il <b>secondo valore massimo distinto</b>.
+Si assuma che esistano almeno due valori differenti.
+</div>
+  <div class="solution-title">SOLUZIONE DA COMPLETARE</div>
+  <pre class="code">function secondoMassimo(v) {
+    let max1 = <select class="blank" id="e9_b1" data-correct="-Infinity"><option value="">— scegli —</option><option value="v[0]">v[0]</option><option value="0">0</option><option value="-Infinity">-Infinity</option><option value="Infinity">Infinity</option></select><span class="feedback" id="fb_e9_b1"></span>;
+    let max2 = <select class="blank" id="e9_b2" data-correct="-Infinity"><option value="">— scegli —</option><option value="0">0</option><option value="v[1]">v[1]</option><option value="Infinity">Infinity</option><option value="-Infinity">-Infinity</option></select><span class="feedback" id="fb_e9_b2"></span>;
+
+    for (let i = 0; i &lt; v.length; i++) {
+        let x = v[i];
+
+        if (<select class="blank" id="e9_b3" data-correct="x &gt; max1"><option value="">— scegli —</option><option value="x &lt; max1">x &lt; max1</option><option value="x &gt; max1">x &gt; max1</option><option value="x === max1">x === max1</option><option value="x &gt; max2">x &gt; max2</option></select><span class="feedback" id="fb_e9_b3"></span>) {
+            <select class="blank" id="e9_b4" data-correct="max2 = max1"><option value="">— scegli —</option><option value="max2 = max1">max2 = max1</option><option value="max2 = x">max2 = x</option><option value="x = max2">x = max2</option><option value="max1 = max2">max1 = max2</option></select><span class="feedback" id="fb_e9_b4"></span>;
+            max1 = x;
+        } else if (<select class="blank" id="e9_b5" data-correct="x &gt; max2 &amp;&amp; x &lt; max1"><option value="">— scegli —</option><option value="x &gt;= max1">x &gt;= max1</option><option value="x &lt; max2 || x === max1">x &lt; max2 || x === max1</option><option value="x &gt; max1 &amp;&amp; x &lt; max2">x &gt; max1 &amp;&amp; x &lt; max2</option><option value="x &gt; max2 &amp;&amp; x &lt; max1">x &gt; max2 &amp;&amp; x &lt; max1</option></select><span class="feedback" id="fb_e9_b5"></span>) {
+            <select class="blank" id="e9_b6" data-correct="max2 = x"><option value="">— scegli —</option><option value="max2++">max2++</option><option value="max1 = x">max1 = x</option><option value="x = max2">x = max2</option><option value="max2 = x">max2 = x</option></select><span class="feedback" id="fb_e9_b6"></span>;
+        }
+    }
+
+    return <select class="blank" id="e9_b7" data-correct="max2"><option value="">— scegli —</option><option value="max2">max2</option><option value="v[1]">v[1]</option><option value="max1 - max2">max1 - max2</option><option value="max1">max1</option></select><span class="feedback" id="fb_e9_b7"></span>;
+}</pre>
+  <div class="exercise-result" id="result-9">0 / 7 selezioni corrette</div>
+</section>
+
+<section class="exercise" data-ex="10">
+  <h2>10. Faro quantistico — trovare il primo successivo</h2>
+  <div class="problem">
+Dato un intero N, il sistema deve trovare il primo numero primo strettamente maggiore di N.
+La funzione <b>primo(n)</b> deve verificare la primalità senza provare divisori oltre la radice quadrata di n;
+<b>prossimoPrimo(N)</b> deve poi cercare il primo successivo.
+</div>
+  <div class="solution-title">SOLUZIONE DA COMPLETARE</div>
+  <pre class="code">function primo(n) {
+    if (<select class="blank" id="e10_b1" data-correct="n &lt; 2"><option value="">— scegli —</option><option value="n % 2 === 0">n % 2 === 0</option><option value="n === 2">n === 2</option><option value="n &lt;= 0">n &lt;= 0</option><option value="n &lt; 2">n &lt; 2</option></select><span class="feedback" id="fb_e10_b1"></span>) {
+        return false;
+    }
+
+    for (let d = <select class="blank" id="e10_b2" data-correct="2"><option value="">— scegli —</option><option value="1">1</option><option value="n - 1">n - 1</option><option value="0">0</option><option value="2">2</option></select><span class="feedback" id="fb_e10_b2"></span>; <select class="blank" id="e10_b3" data-correct="d * d &lt;= n"><option value="">— scegli —</option><option value="d &lt; n">d &lt; n</option><option value="d * d &lt;= n">d * d &lt;= n</option><option value="d &lt;= n">d &lt;= n</option><option value="d * 2 &lt;= n">d * 2 &lt;= n</option></select><span class="feedback" id="fb_e10_b3"></span>; d++) {
+        if (<select class="blank" id="e10_b4" data-correct="n % d === 0"><option value="">— scegli —</option><option value="n % d !== 0">n % d !== 0</option><option value="d % n === 0">d % n === 0</option><option value="n % d === 0">n % d === 0</option><option value="n / d === 0">n / d === 0</option></select><span class="feedback" id="fb_e10_b4"></span>) {
+            return <select class="blank" id="e10_b5" data-correct="false"><option value="">— scegli —</option><option value="n">n</option><option value="false">false</option><option value="true">true</option><option value="d">d</option></select><span class="feedback" id="fb_e10_b5"></span>;
+        }
+    }
+
+    return true;
+}
+
+function prossimoPrimo(N) {
+    let candidato = <select class="blank" id="e10_b6" data-correct="N + 1"><option value="">— scegli —</option><option value="N + 1">N + 1</option><option value="N - 1">N - 1</option><option value="N">N</option><option value="2">2</option></select><span class="feedback" id="fb_e10_b6"></span>;
+
+    while (<select class="blank" id="e10_b7" data-correct="!primo(candidato)"><option value="">— scegli —</option><option value="candidato % 2 === 0">candidato % 2 === 0</option><option value="!primo(candidato)">!primo(candidato)</option><option value="candidato &lt; N">candidato &lt; N</option><option value="primo(candidato)">primo(candidato)</option></select><span class="feedback" id="fb_e10_b7"></span>) {
+        <select class="blank" id="e10_b8" data-correct="candidato++"><option value="">— scegli —</option><option value="candidato--">candidato--</option><option value="N++">N++</option><option value="candidato += N">candidato += N</option><option value="candidato++">candidato++</option></select><span class="feedback" id="fb_e10_b8"></span>;
+    }
+
+    return candidato;
+}</pre>
+  <div class="exercise-result" id="result-10">0 / 8 selezioni corrette</div>
+</section>
+
+</main>
+
+<div class="controls">
+  <button id="check" type="button">Correggi</button>
+  <button id="reset" type="button">Azzera</button>
+  <div id="score">Punteggio: — / 69</div>
+</div>
+
+<script>
+function checkAll() {
+  const selects = [...document.querySelectorAll("select.blank")];
+  let totalCorrect = 0;
+
+  document.querySelectorAll(".exercise").forEach(section => {
+    const local = [...section.querySelectorAll("select.blank")];
+    let localCorrect = 0;
+
+    local.forEach(sel => {
+      const fb = document.getElementById("fb_" + sel.id);
+      sel.classList.remove("correct", "wrong");
+      fb.className = "feedback";
+      fb.textContent = "";
+
+      if (sel.value === sel.dataset.correct) {
+        sel.classList.add("correct");
+        fb.textContent = "✓";
+        fb.classList.add("ok");
+        localCorrect++;
+        totalCorrect++;
+      } else {
+        sel.classList.add("wrong");
+        fb.textContent = "✗";
+        fb.classList.add("bad");
+      }
+    });
+
+    const result = section.querySelector(".exercise-result");
+    result.textContent = localCorrect + " / " + local.length + " selezioni corrette";
+  });
+
+  document.getElementById("score").textContent =
+    "Punteggio: " + totalCorrect + " / " + selects.length +
+    " (" + Math.round(totalCorrect * 100 / selects.length) + "%)";
+}
+
+function resetAll() {
+  document.querySelectorAll("select.blank").forEach(sel => {
+    sel.value = "";
+    sel.classList.remove("correct", "wrong");
+  });
+  document.querySelectorAll(".feedback").forEach(fb => {
+    fb.textContent = "";
+    fb.className = "feedback";
+  });
+  document.querySelectorAll(".exercise").forEach(section => {
+    const n = section.querySelectorAll("select.blank").length;
+    section.querySelector(".exercise-result").textContent = "0 / " + n + " selezioni corrette";
+  });
+  document.getElementById("score").textContent = "Punteggio: — / 69";
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+document.getElementById("check").addEventListener("click", checkAll);
+document.getElementById("reset").addEventListener("click", resetAll);
+</script>
+</body>
+</html>
