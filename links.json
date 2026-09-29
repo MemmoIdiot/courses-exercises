@@ -1,18 +1,10 @@
 [
   {
-    "nome": "Google",
-    "url": "https://www.google.com"
+    "nome": "Immagini in movimento (50 quiz)",
+    "url": "quiz_50_immagini_in_movimento_editoria_elettronica.html"
   },
   {
-    "nome": "Wikipedia",
-    "url": "https://it.wikipedia.org"
-  },
-  {
-    "nome": "OpenAI",
-    "url": "https://openai.com"
-  },
-  {
-    "nome": "Università di Pisa",
-    "url": "https://www.unipi.it"
+    "nome": "Infographics (50 quiz)",
+    "url": "quiz_infographics_50.html"
   }
 ]
