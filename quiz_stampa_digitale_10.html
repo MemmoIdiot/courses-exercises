@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiz sulla stampa digitale</title>
+<style>
+body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f4f6f8;color:#1f2937}
+header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:40px 20px}
+.wrap{max-width:980px;margin:auto}
+h1{margin:0 0 8px;font-size:2.4rem} header p{margin:0;color:#dbeafe}
+.toolbar{max-width:980px;margin:-18px auto 25px;padding:0 20px}
+.toolbar>div{background:white;border:1px solid #dbe2ea;border-radius:15px;padding:15px;display:flex;gap:10px;flex-wrap:wrap;box-shadow:0 8px 25px #00000012}
+.stat{padding:8px 12px;background:#f8fafc;border-radius:9px;font-weight:700}
+main{max-width:980px;margin:auto;padding:0 20px 50px}
+.card{background:white;border:1px solid #dbe2ea;border-radius:15px;padding:20px;margin:15px 0}
+.card.correct{border-color:#86efac;background:#f0fdf4}
+.card.wrong{border-color:#fca5a5;background:#fef2f2}
+.meta{display:flex;gap:10px;align-items:center}
+.meta span{background:#dbeafe;color:#1e40af;padding:3px 9px;border-radius:999px;font-size:.78rem;font-weight:800;text-transform:uppercase}
+.meta small{color:#64748b;font-weight:700}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;padding:10px;border:1px solid #dbe2ea;border-radius:9px;background:white;cursor:pointer}
+.opt.good{border-color:#86efac;background:#f0fdf4} .opt.bad{border-color:#fca5a5;background:#fef2f2}
+button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:pointer;background:#e0e7ff;color:#3730a3}
+button.primary{background:#2563eb;color:white} button.secondary{background:#e2e8f0;color:#0f172a}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.feedback,.exp{display:none;margin-top:11px;padding:10px;border-radius:9px}
+.feedback.show,.exp.show{display:block} .ok{background:#f0fdf4;color:#166534} .badfb{background:#fef2f2;color:#991b1b} .warn{background:#fefce8;color:#854d0e}
+.exp{border-left:3px solid #94a3b8;border-radius:0;color:#475569}
+.result{display:none;background:white;border:1px solid #dbe2ea;border-radius:15px;padding:20px;margin:20px 0}
+.result.show{display:block} .score{font-size:2rem;font-weight:900}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>Stampa digitale — Quiz interattivo</h1><p>10 domande su principi generali, stampa laser e stampa a getto d'inchiostro.</p></div></header>
+
+<div class="toolbar"><div>
+  <div class="stat">Risposte: <span id="answered">0</span>/10</div>
+  <div class="stat">Corrette validate: <span id="correct">0</span></div>
+  <button class="primary" onclick="validateAll()">Valida tutto</button>
+  <button class="secondary" onclick="resetQuiz()">Ricomincia</button>
+</div></div>
+
+<main>
+<div class="result" id="result"><div>Risultato complessivo</div><div class="score"><span id="score">0</span>/10 — <span id="pct">0</span>%</div><p id="assessment"></p></div>
+
+    <section class="card" id="card-0">
+      <div class="meta"><span>Principi</span><small>Domanda 1 di 10</small></div>
+      <h3>Qual è una caratteristica fondamentale della stampa digitale rispetto ai procedimenti tradizionali con forma di stampa?</h3>
+      <div class="opts"><label class="opt" data-i="0"><input type="radio" name="q0" value="0" onchange="countAnswered()"><span><b>A.</b> L'immagine viene trasferita direttamente dai dati digitali al sistema di stampa</span></label><label class="opt" data-i="1"><input type="radio" name="q0" value="1" onchange="countAnswered()"><span><b>B.</b> Richiede sempre una lastra metallica</span></label><label class="opt" data-i="2"><input type="radio" name="q0" value="2" onchange="countAnswered()"><span><b>C.</b> Può stampare solo in monocromia</span></label><label class="opt" data-i="3"><input type="radio" name="q0" value="3" onchange="countAnswered()"><span><b>D.</b> Utilizza necessariamente caratteri mobili</span></label></div>
+      <div class="feedback" id="fb-0"></div>
+      <div class="actions">
+        <button onclick="validateOne(0)">Valida risposta</button>
+        <button class="secondary" onclick="toggleExp(0)">Mostra spiegazione</button>
+      </div>
+      <div class="exp" id="exp-0">La stampa digitale utilizza direttamente dati digitali senza richiedere una forma di stampa permanente come una lastra.</div>
+    </section>
+    
+    <section class="card" id="card-1">
+      <div class="meta"><span>Laser</span><small>Domanda 2 di 10</small></div>
+      <h3>Nella stampa laser, quale componente viene caricato elettricamente e poi esposto selettivamente al fascio laser?</h3>
+      <div class="opts"><label class="opt" data-i="0"><input type="radio" name="q1" value="0" onchange="countAnswered()"><span><b>A.</b> Il vassoio carta</span></label><label class="opt" data-i="1"><input type="radio" name="q1" value="1" onchange="countAnswered()"><span><b>B.</b> Il fusore</span></label><label class="opt" data-i="2"><input type="radio" name="q1" value="2" onchange="countAnswered()"><span><b>C.</b> La cartuccia di carta</span></label><label class="opt" data-i="3"><input type="radio" name="q1" value="3" onchange="countAnswered()"><span><b>D.</b> Il tamburo fotosensibile</span></label></div>
+      <div class="feedback" id="fb-1"></div>
+      <div class="actions">
+        <button onclick="validateOne(1)">Valida risposta</button>
+        <button class="secondary" onclick="toggleExp(1)">Mostra spiegazione</button>
+      </div>
+      <div class="exp" id="exp-1">Il tamburo fotosensibile riceve una carica elettrostatica e il laser crea l'immagine latente modificando selettivamente tale carica.</div>
+    </section>
+    
+    <section class="card" id="card-2">
+      <div class="meta"><span>Laser</span><small>Domanda 3 di 10</small></div>
+      <h3>Qual è la funzione principale del toner?</h3>
+      <div class="opts"><label class="opt" data-i="0"><input type="radio" name="q2" value="0" onchange="countAnswered()"><span><b>A.</b> Lubrificare i rulli</span></label><label class="opt" data-i="1"><input type="radio" name="q2" value="1" onchange="countAnswered()"><span><b>B.</b> Aumentare la risoluzione del file</span></label><label class="opt" data-i="2"><input type="radio" name="q2" value="2" onchange="countAnswered()"><span><b>C.</b> Costituire il materiale colorante in polvere che forma l'immagine</span></label><label class="opt" data-i="3"><input type="radio" name="q2" value="3" onchange="countAnswered()"><span><b>D.</b> Raffreddare il tamburo</span></label></div>
+      <div class="feedback" id="fb-2"></div>
+      <div class="actions">
+        <button onclick="validateOne(2)">Valida risposta</button>
+        <button class="secondary" onclick="toggleExp(2)">Mostra spiegazione</button>
+      </div>
+      <div class="exp" id="exp-2">Il toner è una polvere composta da pigmenti e resine che aderisce alle aree caricate del tamburo e viene poi trasferita alla carta.</div>
+    </section>
+    
+    <section class="card" id="card-3">
+      <div class="meta"><span>Laser</span><small>Domanda 4 di 10</small></div>
+      <h3>Quale componente fissa stabilmente il toner sul supporto mediante calore e pressione?</h3>
+      <div class="opts"><label class="opt" data-i="0"><input type="radio" name="q3" value="0" onchange="countAnswered()"><span><b>A.</b> Il controller di rete</span></label><label class="opt" data-i="1"><input type="radio" name="q3" value="1" onchange="countAnswered()"><span><b>B.</b> Il fusore</span></label><label class="opt" data-i="2"><input type="radio" name="q3" value="2" onchange="countAnswered()"><span><b>C.</b> Il laser</span></label><label class="opt" data-i="3"><input type="radio" name="q3" value="3" onchange="countAnswered()"><span><b>D.</b> Il fotoconduttore</span></label></div>
+      <div class="feedback" id="fb-3"></div>
+      <div class="actions">
+        <button onclick="validateOne(3)">Valida risposta</button>
+        <button class="secondary" onclick="toggleExp(3)">Mostra spiegazione</button>
+      </div>
+      <div class="exp" id="exp-3">Il fusore riscalda e comprime il toner, facendolo aderire permanentemente alla carta.</div>
+    </section>
+    
+    <section class="card" id="card-4">
+      <div class="meta"><span>Laser</span><small>Domanda 5 di 10</small></div>
+      <h3>Quale sequenza descrive meglio il processo elettrofotografico della stampa laser?</h3>
+      <div class="opts"><label class="opt" data-i="0"><input type="radio" name="q4" value="0" onchange="countAnswered()"><span><b>A.</b> Fusione, scansione, incisione, lavaggio, asciugatura</span></label><label class="opt" data-i="1"><input type="radio" name="q4" value="1" onchange="countAnswered()"><span><b>B.</b> Inchiostrazione, morsicatura, impressione, incisione, essiccazione</span></label><label class="opt" data-i="2"><input type="radio" name="q4" value="2" onchange="countAnswered()"><span><b>C.</b> Rasterizzazione, taglio, plastificazione, rilegatura, scansione</span></label><label class="opt" data-i="3"><input type="radio" name="q4" value="3" onchange="countAnswered()"><span><b>D.</b> Carica, esposizione, sviluppo con toner, trasferimento, fusione</span></label></div>
+      <div class="feedback" id="fb-4"></div>
+      <div class="actions">
+        <button onclick="validateOne(4)">Valida risposta</button>
+        <button class="secondary" onclick="toggleExp(4)">Mostra spiegazione</button>
+      </div>
+      <div class="exp" id="exp-4">Il ciclo laser comprende carica del tamburo, esposizione, sviluppo con toner, trasferimento sul supporto e fusione.</div>
+    </section>
+    
+    <section class="card" id="card-5">
+      <div class="meta"><span>Inkjet</span><small>Domanda 6 di 10</small></div>
+      <h3>Nella stampa a getto d'inchiostro, come viene prodotta l'immagine?</h3>
+      <div class="opts"><label class="opt" data-i="0"><input type="radio" name="q5" value="0" onchange="countAnswered()"><span><b>A.</b> Con una matrice metallica</span></label><label class="opt" data-i="1"><input type="radio" name="q5" value="1" onchange="countAnswered()"><span><b>B.</b> Con l'espulsione controllata di microscopiche gocce d'inchiostro</span></label><label class="opt" data-i="2"><input type="radio" name="q5" value="2" onchange="countAnswered()"><span><b>C.</b> Con la fusione di toner</span></label><label class="opt" data-i="3"><input type="radio" name="q5" value="3" onchange="countAnswered()"><span><b>D.</b> Con incisione meccanica della carta</span></label></div>
+      <div class="feedback" id="fb-5"></div>
+      <div class="actions">
+        <button onclick="validateOne(5)">Valida risposta</button>
+        <button class="secondary" onclick="toggleExp(5)">Mostra spiegazione</button>
+      </div>
+      <div class="exp" id="exp-5">La tecnologia inkjet deposita piccole gocce d'inchiostro sul supporto in posizioni controllate digitalmente.</div>
+    </section>
+    
+    <section class="card" id="card-6">
+      <div class="meta"><span>Inkjet</span><small>Domanda 7 di 10</small></div>
+      <h3>Qual è la differenza essenziale tra thermal inkjet e piezoelectric inkjet?</h3>
+      <div class="opts"><label class="opt" data-i="0"><input type="radio" name="q6" value="0" onchange="countAnswered()"><span><b>A.</b> La prima stampa solo in nero, la seconda solo a colori</span></label><label class="opt" data-i="1"><input type="radio" name="q6" value="1" onchange="countAnswered()"><span><b>B.</b> La prima usa carta, la seconda solo plastica</span></label><label class="opt" data-i="2"><input type="radio" name="q6" value="2" onchange="countAnswered()"><span><b>C.</b> La prima usa il calore per generare la goccia, la seconda un elemento piezoelettrico</span></label><label class="opt" data-i="3"><input type="radio" name="q6" value="3" onchange="countAnswered()"><span><b>D.</b> La prima usa toner, la seconda caratteri mobili</span></label></div>
+      <div class="feedback" id="fb-6"></div>
+      <div class="actions">
+        <button onclick="validateOne(6)">Valida risposta</button>
+        <button class="secondary" onclick="toggleExp(6)">Mostra spiegazione</button>
+      </div>
+      <div class="exp" id="exp-6">Nel thermal inkjet il calore genera una bolla che espelle la goccia; nel piezo inkjet un elemento piezoelettrico deforma la camera d'inchiostro.</div>
+    </section>
+    
+    <section class="card" id="card-7">
+      <div class="meta"><span>Inkjet</span><small>Domanda 8 di 10</small></div>
+      <h3>Quale problema può verificarsi se l'inchiostro si secca negli ugelli di una stampante inkjet?</h3>
+      <div class="opts"><label class="opt" data-i="0"><input type="radio" name="q7" value="0" onchange="countAnswered()"><span><b>A.</b> L'ostruzione degli ugelli</span></label><label class="opt" data-i="1"><input type="radio" name="q7" value="1" onchange="countAnswered()"><span><b>B.</b> La magnetizzazione del tamburo</span></label><label class="opt" data-i="2"><input type="radio" name="q7" value="2" onchange="countAnswered()"><span><b>C.</b> La fusione del toner</span></label><label class="opt" data-i="3"><input type="radio" name="q7" value="3" onchange="countAnswered()"><span><b>D.</b> La perdita di carica del fusore</span></label></div>
+      <div class="feedback" id="fb-7"></div>
+      <div class="actions">
+        <button onclick="validateOne(7)">Valida risposta</button>
+        <button class="secondary" onclick="toggleExp(7)">Mostra spiegazione</button>
+      </div>
+      <div class="exp" id="exp-7">L'inchiostro essiccato può bloccare gli ugelli, provocando righe mancanti, colori irregolari o difetti di stampa.</div>
+    </section>
+    
+    <section class="card" id="card-8">
+      <div class="meta"><span>Confronto</span><small>Domanda 9 di 10</small></div>
+      <h3>Perché una stampante laser da ufficio è spesso preferita per grandi quantità di documenti testuali?</h3>
+      <div class="opts"><label class="opt" data-i="0"><input type="radio" name="q8" value="0" onchange="countAnswered()"><span><b>A.</b> Perché usa sempre inchiostri liquidi</span></label><label class="opt" data-i="1"><input type="radio" name="q8" value="1" onchange="countAnswered()"><span><b>B.</b> Perché produce necessariamente fotografie migliori</span></label><label class="opt" data-i="2"><input type="radio" name="q8" value="2" onchange="countAnswered()"><span><b>C.</b> Per la velocità elevata e la buona nitidezza del testo</span></label><label class="opt" data-i="3"><input type="radio" name="q8" value="3" onchange="countAnswered()"><span><b>D.</b> Perché non usa materiali di consumo</span></label></div>
+      <div class="feedback" id="fb-8"></div>
+      <div class="actions">
+        <button onclick="validateOne(8)">Valida risposta</button>
+        <button class="secondary" onclick="toggleExp(8)">Mostra spiegazione</button>
+      </div>
+      <div class="exp" id="exp-8">La stampa laser è spesso efficiente su documenti testuali grazie a velocità, nitidezza e costi competitivi sulle tirature d'ufficio.</div>
+    </section>
+    
+    <section class="card" id="card-9">
+      <div class="meta"><span>Produzione</span><small>Domanda 10 di 10</small></div>
+      <h3>Qual è un vantaggio importante della stampa digitale nelle basse tirature editoriali?</h3>
+      <div class="opts"><label class="opt" data-i="0"><input type="radio" name="q9" value="0" onchange="countAnswered()"><span><b>A.</b> Richiedere sempre la preparazione di lastre</span></label><label class="opt" data-i="1"><input type="radio" name="q9" value="1" onchange="countAnswered()"><span><b>B.</b> Impedire la personalizzazione</span></label><label class="opt" data-i="2"><input type="radio" name="q9" value="2" onchange="countAnswered()"><span><b>C.</b> Essere limitata al bianco e nero</span></label><label class="opt" data-i="3"><input type="radio" name="q9" value="3" onchange="countAnswered()"><span><b>D.</b> Ridurre i costi di avviamento e rendere conveniente stampare poche copie</span></label></div>
+      <div class="feedback" id="fb-9"></div>
+      <div class="actions">
+        <button onclick="validateOne(9)">Valida risposta</button>
+        <button class="secondary" onclick="toggleExp(9)">Mostra spiegazione</button>
+      </div>
+      <div class="exp" id="exp-9">L'assenza di forme di stampa tradizionali riduce i costi iniziali e favorisce basse tirature, personalizzazione e print-on-demand.</div>
+    </section>
+    
+</main>
+
+<script>
+const answers=[0,3,2,1,3,1,2,0,2,3];
+
+function selected(i){
+  const el=document.querySelector(`input[name="q${i}"]:checked`);
+  return el?Number(el.value):null;
+}
+function countAnswered(){
+  let n=0; for(let i=0;i<10;i++) if(selected(i)!==null)n++;
+  document.getElementById("answered").textContent=n;
+}
+function clearState(i){
+  const c=document.getElementById(`card-${i}`);
+  c.classList.remove("correct","wrong");
+  c.querySelectorAll(".opt").forEach(x=>x.classList.remove("good","bad"));
+}
+function validateOne(i,silent=false){
+  const s=selected(i), c=document.getElementById(`card-${i}`), fb=document.getElementById(`fb-${i}`);
+  clearState(i);
+  if(s===null){fb.className="feedback show warn";fb.textContent="Seleziona una risposta prima di validare.";return false;}
+  const opts=c.querySelectorAll(".opt"); opts[answers[i]].classList.add("good");
+  if(s===answers[i]){
+    c.classList.add("correct");fb.className="feedback show ok";fb.textContent="Risposta corretta.";
+    if(!silent)document.getElementById(`exp-${i}`).classList.add("show");
+    updateCorrect(); return true;
+  } else {
+    c.classList.add("wrong");opts[s].classList.add("bad");fb.className="feedback show badfb";
+    fb.textContent=`Risposta non corretta. La soluzione è ${String.fromCharCode(65+answers[i])}.`;
+    if(!silent)document.getElementById(`exp-${i}`).classList.add("show");
+    updateCorrect(); return false;
+  }
+}
+function toggleExp(i){document.getElementById(`exp-${i}`).classList.toggle("show")}
+function updateCorrect(){
+  let n=0;
+  for(let i=0;i<10;i++) if(selected(i)===answers[i] && document.getElementById(`card-${i}`).classList.contains("correct"))n++;
+  document.getElementById("correct").textContent=n;
+}
+function validateAll(){
+  let score=0, missing=0;
+  for(let i=0;i<10;i++){
+    if(selected(i)===null){missing++; const fb=document.getElementById(`fb-${i}`);fb.className="feedback show warn";fb.textContent="Domanda non risposta.";}
+    else {if(validateOne(i,true))score++;document.getElementById(`exp-${i}`).classList.add("show");}
+  }
+  const pct=score*10;
+  document.getElementById("score").textContent=score;document.getElementById("pct").textContent=pct;
+  let msg=pct>=90?"Ottima padronanza della stampa digitale.":pct>=70?"Buona preparazione, con pochi aspetti da consolidare.":pct>=60?"Preparazione sufficiente, ma conviene ripassare alcuni passaggi tecnici.":"È consigliato un ripasso di stampa laser e inkjet.";
+  if(missing)msg+=` Domande non risposte: ${missing}.`;
+  document.getElementById("assessment").textContent=msg;document.getElementById("result").classList.add("show");
+  document.getElementById("result").scrollIntoView({behavior:"smooth"});
+  countAnswered();updateCorrect();
+}
+function resetQuiz(){
+  document.querySelectorAll('input[type="radio"]').forEach(x=>x.checked=false);
+  document.querySelectorAll(".card").forEach(x=>x.classList.remove("correct","wrong"));
+  document.querySelectorAll(".opt").forEach(x=>x.classList.remove("good","bad"));
+  document.querySelectorAll(".feedback").forEach(x=>{x.className="feedback";x.textContent=""});
+  document.querySelectorAll(".exp").forEach(x=>x.classList.remove("show"));
+  document.getElementById("answered").textContent="0";document.getElementById("correct").textContent="0";document.getElementById("result").classList.remove("show");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+</script>
+</body>
+</html>
