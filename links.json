@@ -6,5 +6,9 @@
   {
     "nome": "Infographics (50 quiz)",
     "url": "quiz_infographics_50.html"
+  },
+  {
+    "nome": "Stampa digitale (10 quiz)",
+    "url" : "quiz_stampa_digitale_10.html"
   }
 ]
