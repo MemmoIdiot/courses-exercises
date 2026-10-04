@@ -10,5 +10,9 @@
   {
     "nome": "Stampa digitale (10 quiz)",
     "url" : "quiz_stampa_digitale_10.html"
+  },
+  {
+    "nome": "Quiz Javascript 2",
+    "url": "esercizi_javascript_interattivi_2.html"
   }
 ]
